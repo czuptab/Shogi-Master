@@ -49,10 +49,6 @@ public class BoardManager : MonoBehaviour {
                 }
             }
         }
-
-        if(Input.GetKeyDown(KeyCode.Escape)) {
-            Application.Quit();
-        }
     }
 
     private void SelectShogiman(int x, int y) {

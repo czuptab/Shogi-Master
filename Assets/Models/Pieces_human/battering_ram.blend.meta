@@ -14,6 +14,19 @@ ModelImporter:
     100016: wheel2_R
     100018: wheel3_L
     100020: wheel3_R
+    100022: ram_end
+    100024: wheel1.L
+    100026: wheel1.L_end
+    100028: wheel1.R
+    100030: wheel1.R_end
+    100032: wheel2.L
+    100034: wheel2.L_end
+    100036: wheel2.R
+    100038: wheel2.R_end
+    100040: wheel3.L
+    100042: wheel3.L_end
+    100044: wheel3.R
+    100046: wheel3.R_end
     400000: Armature
     400002: base
     400004: //RootNode
@@ -25,6 +38,19 @@ ModelImporter:
     400016: wheel2_R
     400018: wheel3_L
     400020: wheel3_R
+    400022: ram_end
+    400024: wheel1.L
+    400026: wheel1.L_end
+    400028: wheel1.R
+    400030: wheel1.R_end
+    400032: wheel2.L
+    400034: wheel2.L_end
+    400036: wheel2.R
+    400038: wheel2.R_end
+    400040: wheel3.L
+    400042: wheel3.L_end
+    400044: wheel3.R
+    400046: wheel3.R_end
     2100000: texture
     2100002: team_color
     4300000: battering_ram
@@ -33,6 +59,10 @@ ModelImporter:
     7400004: idle
     7400006: move
     7400008: choice
+    7400010: Armature|attack
+    7400012: Armature|choice
+    7400014: Armature|idle
+    7400016: Armature|move
     9500000: //RootNode
     13700000: battering_ram
     2186277476908879412: ImportLogs
@@ -70,6 +100,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -94,6 +125,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

@@ -15,5 +15,6 @@ public abstract class Shogiman : MonoBehaviour {
     public virtual bool[,] PossibleMove() {
         return new bool[9,9];
     }
-}
 
+    public abstract void Move(int x, int y, Vector3 tileCenter);
+}

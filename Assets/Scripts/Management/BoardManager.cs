@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using TMPro;
 
 public class BoardManager : MonoBehaviour {
     #region VARIABLES
@@ -24,6 +26,8 @@ public class BoardManager : MonoBehaviour {
 
     public GameObject attacker_win;
     public GameObject defender_win;
+
+    public CameraController cameraController;
 
     #endregion
 
@@ -72,16 +76,18 @@ public class BoardManager : MonoBehaviour {
         BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
     }
 
-    private void MoveShogiman(int x, int y) {
-        if(allowedMoves[x, y]) {
+    private void MoveShogiman(int x, int y)
+    {
+        if (allowedMoves[x, y])
+        {
             Shogiman c = Shogimans[x, y];
 
-            if(c != null && c.isAttacker != isAttackerTurn) {
-                //Capture a piece
+            if (c != null && c.isAttacker != isAttackerTurn)
+            {
+                // Capture a piece
 
-                //If it is the king
-                if(c.GetType() == typeof(King)) {
-                    //End the game
+                if (c.GetType() == typeof(King))
+                {
                     EndGame();
                     return;
                 }
@@ -90,14 +96,21 @@ public class BoardManager : MonoBehaviour {
             }
 
             Shogimans[selectedShogiman.CurrentX, selectedShogiman.CurrentY] = null;
-            selectedShogiman.transform.position = GetTileCenter(x, y);
-            selectedShogiman.SetPosition(x, y);
-            Shogimans[x, y] = selectedShogiman;
-            isAttackerTurn = !isAttackerTurn;
-        }
 
-        BoardHighlights.Instance.HideHighlights();
+            selectedShogiman.Move(x, y, GetTileCenter(x, y));
+            
+            BoardHighlights.Instance.HideHighlights();
+        }
+    }
+
+    public void CompleteMovement(Shogiman shogiman, int x, int y)
+    {
+        selectedShogiman.SetPosition(x, y);
+        Shogimans[x, y] = selectedShogiman;
+        isAttackerTurn = !isAttackerTurn;
+
         selectedShogiman = null;
+        cameraController.RotateCamera(180f);
     }
 
     private void UpdateSelection() {
@@ -116,7 +129,7 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnAttackerShogiman(int index, int x, int y) {
         
-        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(-90, 180, 0)) as GameObject;
+        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(-90, 180, 0));
         go.transform.SetParent(transform);
         Shogimans[x, y] = go.GetComponent<Shogiman>();
         Shogimans[x, y].SetPosition(x, y);
@@ -125,7 +138,7 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnDefenderShogiman(int index, int x, int y) {
 
-        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x,y), Quaternion.Euler(-90, 0, 0)) as GameObject;
+        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x,y), Quaternion.Euler(-90, 0, 0));
         go.transform.SetParent(transform);
         Shogimans[x, y] = go.GetComponent<Shogiman>();
         Shogimans[x, y].SetPosition(x, y);
@@ -245,6 +258,7 @@ public class BoardManager : MonoBehaviour {
 
         foreach (GameObject go in activeShogiman)
             Destroy(go);
+
         isAttackerTurn = true;
         BoardHighlights.Instance.HideHighlights();
         SpawnAllShogimans();

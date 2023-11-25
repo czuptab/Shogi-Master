@@ -73,6 +73,7 @@ public class BoardManager : MonoBehaviour {
             return;
    
         selectedShogiman = Shogimans[x, y];
+        selectedShogiman.SelectPiece();
         BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
     }
 
@@ -84,7 +85,7 @@ public class BoardManager : MonoBehaviour {
 
             if (c != null && c.isAttacker != isAttackerTurn)
             {
-                // Capture a piece
+                // TODO:Capture a piece into new list
 
                 if (c.GetType() == typeof(King))
                 {
@@ -97,7 +98,13 @@ public class BoardManager : MonoBehaviour {
 
             Shogimans[selectedShogiman.CurrentX, selectedShogiman.CurrentY] = null;
 
-            selectedShogiman.Move(x, y, GetTileCenter(x, y));
+            int distanceX = Mathf.Abs(x - selectedShogiman.CurrentX);
+            int distanceY = Mathf.Abs(y - selectedShogiman.CurrentY);
+            int totalDistance = distanceX + distanceY;
+
+            float moveDuration = totalDistance * 0.5f;
+
+            selectedShogiman.Move(x, y, GetTileCenter(x, y), moveDuration);
             
             BoardHighlights.Instance.HideHighlights();
         }
@@ -129,7 +136,7 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnAttackerShogiman(int index, int x, int y) {
         
-        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(-90, 180, 0));
+        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(0, 180, 0));
         go.transform.SetParent(transform);
         Shogimans[x, y] = go.GetComponent<Shogiman>();
         Shogimans[x, y].SetPosition(x, y);

@@ -51,12 +51,12 @@ public class Knight : Shogiman {
         return r;
     }
 
-    public override void Move(int x, int y, Vector3 tileCenter)
+    public override void Move(int x, int y, Vector3 tileCenter, float movementDuration)
     {
         Vector3 jumpMidpoint = (transform.position + tileCenter) / 2;
         jumpMidpoint.y += 2;
 
-        transform.DOPath(new Vector3[] { transform.position, jumpMidpoint, tileCenter }, 1.0f)
+        transform.DOPath(new Vector3[] { transform.position, jumpMidpoint, tileCenter }, movementDuration)
         .SetEase(Ease.InOutQuad)
         .OnComplete(() => {
             BoardManager.Instance.CompleteMovement(this, x, y);

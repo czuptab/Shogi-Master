@@ -30,9 +30,9 @@ public class Pawn : Shogiman {
         return r;
     }
 
-    public override void Move(int x, int y, Vector3 tileCenter)
+    public override void Move(int x, int y, Vector3 tileCenter, float movementDuration)
     {
-        transform.DOMove(tileCenter, 0.5f).SetEase(Ease.OutQuad)
+        transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
             .OnComplete(() => {
                 BoardManager.Instance.CompleteMovement(this, x, y);
             });

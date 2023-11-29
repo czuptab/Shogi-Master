@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rook : Shogiman {
+public class Rook : ShogiPiece {
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
-        Shogiman c;
+        ShogiPiece c;
         int i;
 
         //Right
@@ -16,11 +16,11 @@ public class Rook : Shogiman {
             if (i >= 9)
                 break;
 
-            c = BoardManager.Instance.Shogimans[i, CurrentY];
+            c = BoardManager.Instance.ShogiPieces[i, CurrentY];
             if (c == null)
                 r[i, CurrentY] = true;
             else {
-                if (c.isAttacker != isAttacker)
+                if (c.IsAttacker != IsAttacker)
                     r[i, CurrentY] = true;
 
                 break;
@@ -34,11 +34,11 @@ public class Rook : Shogiman {
             if (i < 0)
                 break;
 
-            c = BoardManager.Instance.Shogimans[i, CurrentY];
+            c = BoardManager.Instance.ShogiPieces[i, CurrentY];
             if (c == null)
                 r[i, CurrentY] = true;
             else {
-                if (c.isAttacker != isAttacker)
+                if (c.IsAttacker != IsAttacker)
                     r[i, CurrentY] = true;
 
                 break;
@@ -52,11 +52,11 @@ public class Rook : Shogiman {
             if (i >= 9)
                 break;
 
-            c = BoardManager.Instance.Shogimans[CurrentX, i];
+            c = BoardManager.Instance.ShogiPieces[CurrentX, i];
             if (c == null)
                 r[CurrentX, i] = true;
             else {
-                if (c.isAttacker != isAttacker)
+                if (c.IsAttacker != IsAttacker)
                     r[CurrentX, i] = true;
 
                 break;
@@ -70,11 +70,11 @@ public class Rook : Shogiman {
             if (i < 0)
                 break;
 
-            c = BoardManager.Instance.Shogimans[CurrentX, i];
+            c = BoardManager.Instance.ShogiPieces[CurrentX, i];
             if (c == null)
                 r[CurrentX, i] = true;
             else {
-                if (c.isAttacker != isAttacker)
+                if (c.IsAttacker != IsAttacker)
                     r[CurrentX, i] = true;
 
                 break;

@@ -3,24 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn : Shogiman {
+public class Pawn : ShogiPiece {
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
-        Shogiman c;
+        ShogiPiece c;
 
         //Attacker team move
-        if(isAttacker) {
+        if(IsAttacker) {
             if(CurrentY != 8) {
-                c = BoardManager.Instance.Shogimans[CurrentX, CurrentY + 1];
-                if(c == null || !c.isAttacker) {
+                c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY + 1];
+                if(c == null || !c.IsAttacker) {
                     r[CurrentX, CurrentY + 1] = true;
                 }
             }
         } else {
             //Defender team move
             if (CurrentY != 0) {
-                c = BoardManager.Instance.Shogimans[CurrentX, CurrentY - 1];
-                if (c == null || c.isAttacker) {
+                c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY - 1];
+                if (c == null || c.IsAttacker) {
                     r[CurrentX, CurrentY - 1] = true;
                     
                 }

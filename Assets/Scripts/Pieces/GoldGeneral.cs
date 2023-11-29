@@ -3,22 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gold_general : Shogiman {
+public class GoldGeneral : ShogiPiece {
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
-        Shogiman c;
+        ShogiPiece c;
         int i, j;
-        if (isAttacker) {
+        if (IsAttacker) {
             //Top side
             i = CurrentX - 1;
             j = CurrentY + 1;
             if (CurrentY != 8) {
                 for (int k = 0; k < 3; k++) {
                     if (i >= 0 && i < 9) {
-                        c = BoardManager.Instance.Shogimans[i, j];
+                        c = BoardManager.Instance.ShogiPieces[i, j];
                         if (c == null)
                             r[i, j] = true;
-                        else if (isAttacker != c.isAttacker)
+                        else if (IsAttacker != c.IsAttacker)
                             r[i, j] = true;
                     }
 
@@ -29,10 +29,10 @@ public class Gold_general : Shogiman {
             // Down Side
             j = CurrentY - 1;
             if (CurrentY != 0) {
-                c = BoardManager.Instance.Shogimans[CurrentX, j];
+                c = BoardManager.Instance.ShogiPieces[CurrentX, j];
                 if (c == null)
                     r[CurrentX, j] = true;
-                else if (isAttacker != c.isAttacker)
+                else if (IsAttacker != c.IsAttacker)
                     r[CurrentX, j] = true;
             }
 
@@ -43,10 +43,10 @@ public class Gold_general : Shogiman {
             if (CurrentY != 0) {
                 for (int k = 0; k < 3; k++) {
                     if (i >= 0 && i < 9) {
-                        c = BoardManager.Instance.Shogimans[i, j];
+                        c = BoardManager.Instance.ShogiPieces[i, j];
                         if (c == null)
                             r[i, j] = true;
-                        else if (isAttacker != c.isAttacker)
+                        else if (IsAttacker != c.IsAttacker)
                             r[i, j] = true;
                     }
 
@@ -57,29 +57,29 @@ public class Gold_general : Shogiman {
             // Top Side
             j = CurrentY + 1;
             if (CurrentY != 8) {
-                c = BoardManager.Instance.Shogimans[CurrentX, j];
+                c = BoardManager.Instance.ShogiPieces[CurrentX, j];
                 if (c == null)
                     r[CurrentX, j] = true;
-                else if (isAttacker != c.isAttacker)
+                else if (IsAttacker != c.IsAttacker)
                     r[CurrentX, j] = true;
             }
         }
 
         // Middle Left
         if (CurrentX != 0) {
-            c = BoardManager.Instance.Shogimans[CurrentX - 1, CurrentY];
+            c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY];
             if (c == null)
                 r[CurrentX - 1, CurrentY] = true;
-            else if (isAttacker != c.isAttacker)
+            else if (IsAttacker != c.IsAttacker)
                 r[CurrentX - 1, CurrentY] = true;
         }
 
         // Middle Right
         if (CurrentX != 8) {
-            c = BoardManager.Instance.Shogimans[CurrentX + 1, CurrentY];
+            c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY];
             if (c == null)
                 r[CurrentX + 1, CurrentY] = true;
-            else if (isAttacker != c.isAttacker)
+            else if (IsAttacker != c.IsAttacker)
                 r[CurrentX + 1, CurrentY] = true;
         }
 

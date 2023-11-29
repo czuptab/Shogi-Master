@@ -3,27 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Knight : Shogiman {
+public class Knight : ShogiPiece {
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
-        Shogiman c;
+        ShogiPiece c;
 
-        if (isAttacker) {
+        if (IsAttacker) {
             //Attacker team move
             if (CurrentY != 8) {
                 if (CurrentX != 0) {
-                    c = BoardManager.Instance.Shogimans[CurrentX - 1, CurrentY + 2];
+                    c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY + 2];
                     if (c == null)
                         r[CurrentX - 1, CurrentY + 2] = true;
-                    else if (isAttacker != c.isAttacker)
+                    else if (IsAttacker != c.IsAttacker)
                         r[CurrentX - 1, CurrentY + 2] = true;
                 }
 
                 if (CurrentX != 8) {
-                    c = BoardManager.Instance.Shogimans[CurrentX + 1, CurrentY + 2];
+                    c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY + 2];
                     if (c == null)
                         r[CurrentX + 1, CurrentY + 2] = true;
-                    else if (isAttacker != c.isAttacker)
+                    else if (IsAttacker != c.IsAttacker)
                         r[CurrentX + 1, CurrentY + 2] = true;
                 }
             }
@@ -31,18 +31,18 @@ public class Knight : Shogiman {
             //Defender team move
             if (CurrentY != 0) {
                 if (CurrentX != 0) {
-                    c = BoardManager.Instance.Shogimans[CurrentX - 1, CurrentY - 2];
+                    c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY - 2];
                     if (c == null)
                         r[CurrentX - 1, CurrentY - 2] = true;
-                    else if (isAttacker != c.isAttacker)
+                    else if (IsAttacker != c.IsAttacker)
                         r[CurrentX - 1, CurrentY - 2] = true;
                 }
 
                 if (CurrentX != 8) {
-                    c = BoardManager.Instance.Shogimans[CurrentX + 1, CurrentY - 2];
+                    c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY - 2];
                     if (c == null)
                         r[CurrentX + 1, CurrentY - 2] = true;
-                    else if (isAttacker != c.isAttacker)
+                    else if (IsAttacker != c.IsAttacker)
                         r[CurrentX + 1, CurrentY - 2] = true;
                 }
             }

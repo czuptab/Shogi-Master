@@ -3,24 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lance : Shogiman {
+public class Lance : ShogiPiece {
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
-        Shogiman c;
+        ShogiPiece c;
         int i;
         
-        if (isAttacker) {
+        if (IsAttacker) {
             i = CurrentY;
             while (true) {
                 i++;
                 if (i >= 9)
                     break;
 
-                c = BoardManager.Instance.Shogimans[CurrentX, i];
+                c = BoardManager.Instance.ShogiPieces[CurrentX, i];
                 if (c == null)
                     r[CurrentX, i] = true;
                 else {
-                    if (c.isAttacker != isAttacker)
+                    if (c.IsAttacker != IsAttacker)
                         r[CurrentX, i] = true;
 
                     break;
@@ -34,11 +34,11 @@ public class Lance : Shogiman {
                 if (i <0)
                     break;
 
-                c = BoardManager.Instance.Shogimans[CurrentX, i];
+                c = BoardManager.Instance.ShogiPieces[CurrentX, i];
                 if (c == null)
                     r[CurrentX, i] = true;
                 else {
-                    if (c.isAttacker != isAttacker)
+                    if (c.IsAttacker != IsAttacker)
                         r[CurrentX, i] = true;
 
                     break;

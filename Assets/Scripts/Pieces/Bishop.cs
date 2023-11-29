@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bishop : Shogiman {
+public class Bishop : ShogiPiece {
 
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
 
-        Shogiman c;
+        ShogiPiece c;
         int i, j;
 
         // Top Left
@@ -20,11 +20,11 @@ public class Bishop : Shogiman {
             if (i < 0 || j >= 9)
                 break;
 
-            c = BoardManager.Instance.Shogimans[i, j];
+            c = BoardManager.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
-                if (isAttacker != c.isAttacker)
+                if (IsAttacker != c.IsAttacker)
                     r[i, j] = true;
 
                 break;
@@ -40,11 +40,11 @@ public class Bishop : Shogiman {
             if (i >= 9 || j >= 9)
                 break;
 
-            c = BoardManager.Instance.Shogimans[i, j];
+            c = BoardManager.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
-                if (isAttacker != c.isAttacker)
+                if (IsAttacker != c.IsAttacker)
                     r[i, j] = true;
 
                 break;
@@ -60,11 +60,11 @@ public class Bishop : Shogiman {
             if (i < 0 || j < 0)
                 break;
 
-            c = BoardManager.Instance.Shogimans[i, j];
+            c = BoardManager.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
-                if (isAttacker != c.isAttacker)
+                if (IsAttacker != c.IsAttacker)
                     r[i, j] = true;
 
                 break;
@@ -80,11 +80,11 @@ public class Bishop : Shogiman {
             if (i >= 9 || j < 0)
                 break;
 
-            c = BoardManager.Instance.Shogimans[i, j];
+            c = BoardManager.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
-                if (isAttacker != c.isAttacker)
+                if (IsAttacker != c.IsAttacker)
                     r[i, j] = true;
 
                 break;

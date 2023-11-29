@@ -10,8 +10,8 @@ public class BoardManager : MonoBehaviour {
     public static BoardManager Instance { set; get; }
     private bool[,] allowedMoves { set; get; }
 
-    public Shogiman[,] Shogimans { set; get; }
-    private Shogiman selectedShogiman;
+    public ShogiPiece[,] ShogiPieces { set; get; }
+    private ShogiPiece selectedShogiPiece;
 
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
@@ -19,13 +19,13 @@ public class BoardManager : MonoBehaviour {
     private int selectionX = -1;
     private int selectionY = -1;
 
-    public List<GameObject> shogimanPrefabs;
-    private List<GameObject> activeShogiman;
+    [SerializeField] private List<GameObject> shogiPrefabs;
+    private List<GameObject> activeShogiPiece;
 
     public bool isAttackerTurn = true;
 
-    public GameObject attacker_win;
-    public GameObject defender_win;
+    public GameObject attackerWin;
+    public GameObject defenderWin;
 
     public CameraController cameraController;
 
@@ -44,7 +44,7 @@ public class BoardManager : MonoBehaviour {
 
         if(Input.GetMouseButtonDown(0)) {
             if(selectionX >= 0 && selectionY >= 0) {
-                if(selectedShogiman == null) {
+                if(selectedShogiPiece == null) {
                     //Select the shogiman
                     SelectShogiman(selectionX, selectionY);
                 } else {
@@ -56,14 +56,14 @@ public class BoardManager : MonoBehaviour {
     }
 
     private void SelectShogiman(int x, int y) {
-        if (Shogimans[x, y] == null)
+        if (ShogiPieces[x, y] == null)
             return;
 
-        if (Shogimans[x, y].isAttacker != isAttackerTurn)
+        if (ShogiPieces[x, y].IsAttacker != isAttackerTurn)
             return;
 
         bool hasAtleastOneMove = false;
-        allowedMoves = Shogimans[x, y].PossibleMove();
+        allowedMoves = ShogiPieces[x, y].PossibleMove();
         for (int i = 0; i < 9; i++)
             for (int j = 0; j < 9; j++)
                 if (allowedMoves[i, j])
@@ -72,8 +72,8 @@ public class BoardManager : MonoBehaviour {
         if (!hasAtleastOneMove)
             return;
    
-        selectedShogiman = Shogimans[x, y];
-        selectedShogiman.SelectPiece();
+        selectedShogiPiece = ShogiPieces[x, y];
+        selectedShogiPiece.SelectPiece();
         BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
     }
 
@@ -81,9 +81,9 @@ public class BoardManager : MonoBehaviour {
     {
         if (allowedMoves[x, y])
         {
-            Shogiman c = Shogimans[x, y];
+            ShogiPiece c = ShogiPieces[x, y];
 
-            if (c != null && c.isAttacker != isAttackerTurn)
+            if (c != null && c.IsAttacker != isAttackerTurn)
             {
                 // TODO:Capture a piece into new list
 
@@ -92,31 +92,31 @@ public class BoardManager : MonoBehaviour {
                     EndGame();
                     return;
                 }
-                activeShogiman.Remove(c.gameObject);
+                activeShogiPiece.Remove(c.gameObject);
                 Destroy(c.gameObject);
             }
 
-            Shogimans[selectedShogiman.CurrentX, selectedShogiman.CurrentY] = null;
+            ShogiPieces[selectedShogiPiece.CurrentX, selectedShogiPiece.CurrentY] = null;
 
-            int distanceX = Mathf.Abs(x - selectedShogiman.CurrentX);
-            int distanceY = Mathf.Abs(y - selectedShogiman.CurrentY);
+            int distanceX = Mathf.Abs(x - selectedShogiPiece.CurrentX);
+            int distanceY = Mathf.Abs(y - selectedShogiPiece.CurrentY);
             int totalDistance = distanceX + distanceY;
 
             float moveDuration = totalDistance * 0.5f;
 
-            selectedShogiman.Move(x, y, GetTileCenter(x, y), moveDuration);
+            selectedShogiPiece.Move(x, y, GetTileCenter(x, y), moveDuration);
             
             BoardHighlights.Instance.HideHighlights();
         }
     }
 
-    public void CompleteMovement(Shogiman shogiman, int x, int y)
+    public void CompleteMovement(ShogiPiece shogiman, int x, int y)
     {
-        selectedShogiman.SetPosition(x, y);
-        Shogimans[x, y] = selectedShogiman;
+        selectedShogiPiece.SetPosition(x, y);
+        ShogiPieces[x, y] = selectedShogiPiece;
         isAttackerTurn = !isAttackerTurn;
 
-        selectedShogiman = null;
+        selectedShogiPiece = null;
         cameraController.RotateCamera(180f);
     }
 
@@ -134,87 +134,79 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-    private void SpawnAttackerShogiman(int index, int x, int y) {
-        
-        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(0, 180, 0));
+    private void SpawnShogiman(bool isAttacker, PieceType pieceType, int x, int y)
+    {
+        GameObject go = Instantiate(shogiPrefabs[(int)pieceType], GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
         go.transform.SetParent(transform);
-        Shogimans[x, y] = go.GetComponent<Shogiman>();
-        Shogimans[x, y].SetPosition(x, y);
-        activeShogiman.Add(go);
-    }
-
-    private void SpawnDefenderShogiman(int index, int x, int y) {
-
-        GameObject go = Instantiate(shogimanPrefabs[index], GetTileCenter(x,y), Quaternion.Euler(-90, 0, 0));
-        go.transform.SetParent(transform);
-        Shogimans[x, y] = go.GetComponent<Shogiman>();
-        Shogimans[x, y].SetPosition(x, y);
-        activeShogiman.Add(go);
+        go.GetComponent<ShogiPiece>().IsAttacker = isAttacker;
+        ShogiPieces[x, y] = go.GetComponent<ShogiPiece>();
+        ShogiPieces[x, y].SetPosition(x, y);
+        activeShogiPiece.Add(go);
     }
 
     private void SpawnAllShogimans() {
-        activeShogiman = new List<GameObject>();
-        Shogimans = new Shogiman[9, 9];
+        activeShogiPiece = new List<GameObject>();
+        ShogiPieces = new ShogiPiece[9, 9];
 
         //Spawn attackers
 
         //King
-        SpawnAttackerShogiman(0, 4,0);
+        SpawnShogiman(true, PieceType.King, 4,0);
 
         //Golden Generals
-        SpawnAttackerShogiman(1, 3, 0);
-        SpawnAttackerShogiman(1, 5, 0);
+        SpawnShogiman(true, PieceType.GoldGeneral, 3, 0);
+        SpawnShogiman(true, PieceType.GoldGeneral, 5, 0);
 
         //Silver Generals
-        SpawnAttackerShogiman(2, 2, 0);
-        SpawnAttackerShogiman(2, 6, 0);
+        SpawnShogiman(true, PieceType.SilverGeneral, 2, 0);
+        SpawnShogiman(true, PieceType.SilverGeneral, 6, 0);
 
         //Knights
-        SpawnAttackerShogiman(3, 1, 0);
-        SpawnAttackerShogiman(3, 7, 0);
+        SpawnShogiman(true, PieceType.Knight, 1, 0);
+        SpawnShogiman(true, PieceType.Knight, 7, 0);
 
         //Lances
-        SpawnAttackerShogiman(4, 0, 0);
-        SpawnAttackerShogiman(4, 8, 0);
+        SpawnShogiman(true, PieceType.Lance, 0, 0);
+        SpawnShogiman(true, PieceType.Lance, 8, 0);
 
         //Rook and Bishop
-        SpawnAttackerShogiman(5, 1, 1);
-        SpawnAttackerShogiman(6, 7, 1);
+        SpawnShogiman(true, PieceType.Rook, 1, 1);
+        SpawnShogiman(true, PieceType.Bishop, 7, 1);
 
         //Pawns
         for(int i = 0; i < 9; i++) {
-            SpawnAttackerShogiman(7, i, 2);
+            SpawnShogiman(true, PieceType.Pawn, i, 2);
         }
 
         
         //Spawn defenders
 
         //King
-        SpawnDefenderShogiman(10, 4, 8);
+        SpawnShogiman(false, PieceType.King, 4, 8);
 
         //Golden Generals
-        SpawnDefenderShogiman(11,3, 8);
-        SpawnDefenderShogiman(11, 5, 8);
+        SpawnShogiman(false, PieceType.GoldGeneral,3, 8);
+        SpawnShogiman(false, PieceType.GoldGeneral, 5, 8);
 
         //Silver Generals
-        SpawnDefenderShogiman(12, 2, 8);
-        SpawnDefenderShogiman(12, 6, 8);
+        SpawnShogiman(false, PieceType.SilverGeneral, 2, 8);
+        SpawnShogiman(false, PieceType.SilverGeneral, 6, 8);
 
         //Knights
-        SpawnDefenderShogiman(13, 1, 8);
-        SpawnDefenderShogiman(13, 7, 8);
+        SpawnShogiman(false, PieceType.Knight, 1, 8);
+        SpawnShogiman(false, PieceType.Knight, 7, 8);
 
         //Lances
-        SpawnDefenderShogiman(14, 0, 8);
-        SpawnDefenderShogiman(14, 8, 8);
+        SpawnShogiman(false, PieceType.Lance, 0, 8);
+        SpawnShogiman(false, PieceType.Lance, 8, 8);
 
         //Rook and Bishop
-        SpawnDefenderShogiman(15, 7, 7);
-        SpawnDefenderShogiman(16, 1, 7);
+        SpawnShogiman(false, PieceType.Rook, 7, 7);
+        SpawnShogiman(false, PieceType.Bishop, 1, 7);
 
         //Pawns
         for (int i = 0; i < 9; i++) {
-            SpawnDefenderShogiman(17, i, 6);
+            SpawnShogiman(false, PieceType.Pawn, i, 6);
         }
     }
 
@@ -256,14 +248,14 @@ public class BoardManager : MonoBehaviour {
 
     private void EndGame() {
         if(isAttackerTurn) {
-            GameObject win = Instantiate(attacker_win);
+            GameObject win = Instantiate(attackerWin);
             Destroy(win, 2);
         } else {
-            GameObject win = Instantiate(defender_win);
+            GameObject win = Instantiate(defenderWin);
             Destroy(win, 2);
         }
 
-        foreach (GameObject go in activeShogiman)
+        foreach (GameObject go in activeShogiPiece)
             Destroy(go);
 
         isAttackerTurn = true;

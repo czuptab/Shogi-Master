@@ -107,7 +107,7 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-    public void CompleteMovement(ShogiPiece shogiman, int x, int y)
+    public void CompleteMovement(int x, int y)
     {
         selectedShogiPiece.SetPosition(x, y);
         ShogiPieces[x, y] = selectedShogiPiece;

@@ -53,7 +53,7 @@ public class Lance : ShogiPiece {
         animator.SetBool("IsMoving", true);
         transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
             .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(this, x, y);
+                BoardManager.Instance.CompleteMovement(x, y);
                 animator.SetBool("IsMoving", false);
             });
     }

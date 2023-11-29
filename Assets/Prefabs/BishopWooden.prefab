@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1289707055486932
+--- !u!1 &1799604412684304
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4680747840915220}
-  - component: {fileID: 33959000353800434}
-  - component: {fileID: 23587311646986992}
-  - component: {fileID: 114467500946944184}
-  - component: {fileID: -8299974629856437107}
+  - component: {fileID: 4728353335842556}
+  - component: {fileID: 33405054332872296}
+  - component: {fileID: 23977968568965206}
+  - component: {fileID: 114036193980873044}
+  - component: {fileID: 8200242088159100351}
   m_Layer: 0
-  m_Name: defender_gold_general
+  m_Name: BishopWooden
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4680747840915220
+--- !u!4 &4728353335842556
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289707055486932}
+  m_GameObject: {fileID: 1799604412684304}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 19.157318, y: 18.80093, z: 6.7297215}
+  m_LocalScale: {x: 21.887074, y: 21.479902, z: 7.6886497}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!33 &33959000353800434
+  m_LocalEulerAnglesHint: {x: -90, y: 180, z: 0}
+--- !u!33 &33405054332872296
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289707055486932}
-  m_Mesh: {fileID: 4300000, guid: 7ab9d302252229e438d964f392f48abc, type: 3}
---- !u!23 &23587311646986992
+  m_GameObject: {fileID: 1799604412684304}
+  m_Mesh: {fileID: 4300000, guid: fe1a1542dee6ba6458b19288a4b056f9, type: 3}
+--- !u!23 &23977968568965206
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289707055486932}
+  m_GameObject: {fileID: 1799604412684304}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -85,31 +85,31 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &114467500946944184
+--- !u!114 &114036193980873044
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289707055486932}
+  m_GameObject: {fileID: 1799604412684304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be0934912a0d6ad408f78d1085c09696, type: 3}
+  m_Script: {fileID: 11500000, guid: 1420cdffe93dded41b961df9100d716d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAttacker: 0
-  animator: {fileID: -8299974629856437107}
---- !u!95 &-8299974629856437107
+  isAttacker: 1
+  animator: {fileID: 8200242088159100351}
+--- !u!95 &8200242088159100351
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289707055486932}
+  m_GameObject: {fileID: 1799604412684304}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ee45e753036255f4e88c7400d5e5e9dc, type: 2}
+  m_Controller: {fileID: 9100000, guid: b1df03b0e0b81fb45adc698a7f426837, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

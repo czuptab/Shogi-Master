@@ -32,7 +32,7 @@ public class Pawn : ShogiPiece {
     {
         transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
             .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(this, x, y);
+                BoardManager.Instance.CompleteMovement(x, y);
             });
     }
 }

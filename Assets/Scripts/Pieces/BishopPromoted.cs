@@ -98,6 +98,38 @@ public class BishopPromoted : ShogiPiece
             }
         }
 
+        // Up
+        if (CurrentY != 8)
+        {
+            c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY + 1];
+            if (c == null || IsAttacker != c.IsAttacker)
+                r[CurrentX, CurrentY + 1] = true;
+        }
+
+        // Down
+        if (CurrentY != 0)
+        {
+            c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY - 1];
+            if (c == null || IsAttacker != c.IsAttacker)
+                r[CurrentX, CurrentY - 1] = true;
+        }
+
+        // Left
+        if (CurrentX != 0)
+        {
+            c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY];
+            if (c == null || IsAttacker != c.IsAttacker)
+                r[CurrentX - 1, CurrentY] = true;
+        }
+
+        // Right
+        if (CurrentX != 8)
+        {
+            c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY];
+            if (c == null || IsAttacker != c.IsAttacker)
+                r[CurrentX + 1, CurrentY] = true;
+        }
+
         return r;
     }
 

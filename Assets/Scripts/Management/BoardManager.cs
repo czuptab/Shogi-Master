@@ -27,7 +27,7 @@ public class BoardManager : MonoBehaviour {
 
     public CameraController cameraController;
 
-    public Dictionary<PieceType, PieceType> PromotionMap = new Dictionary<PieceType, PieceType>
+    public Dictionary<PieceType, PieceType> PromotionMap = new()
     {
         { PieceType.Lance, PieceType.GoldGeneral },
         { PieceType.Pawn, PieceType.GoldGeneral },

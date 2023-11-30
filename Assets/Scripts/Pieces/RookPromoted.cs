@@ -89,6 +89,54 @@ public class RookPromoted : ShogiPiece
             }
         }
 
+        // Top Left
+        i = CurrentX;
+        int j = CurrentY;
+        i--;
+        j++;
+        if (i >= 0 && j < 9)
+        {
+            c = BoardManager.Instance.ShogiPieces[i, j];
+            if (c == null || c.IsAttacker != IsAttacker)
+                r[i, j] = true;
+        }
+
+        // Top Right
+        i = CurrentX;
+        j = CurrentY;
+        i++;
+        j++;
+        if (i < 9 && j < 9)
+        {
+            c = BoardManager.Instance.ShogiPieces[i, j];
+            if (c == null || c.IsAttacker != IsAttacker)
+                r[i, j] = true;
+        }
+
+        // Down Left
+        i = CurrentX;
+        j = CurrentY;
+        i--;
+        j--;
+        if (i >= 0 && j >= 0)
+        {
+            c = BoardManager.Instance.ShogiPieces[i, j];
+            if (c == null || c.IsAttacker != IsAttacker)
+                r[i, j] = true;
+        }
+
+        // Down Right
+        i = CurrentX;
+        j = CurrentY;
+        i++;
+        j--;
+        if (i < 9 && j >= 0)
+        {
+            c = BoardManager.Instance.ShogiPieces[i, j];
+            if (c == null || c.IsAttacker != IsAttacker)
+                r[i, j] = true;
+        }
+
         return r;
     }
 

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
 public abstract class ShogiPiece : MonoBehaviour {
-    public int CurrentX { set; get; }
-    public int CurrentY { set; get; }
+    public int CurrentX { get; set; }
+    public int CurrentY { get; set; }
     public bool IsAttacker;
     public Animator animator;
-    public PieceType pieceType;
+    public PieceType PieceType;
 
     public void SetPosition(int x, int y) {
         CurrentX = x;

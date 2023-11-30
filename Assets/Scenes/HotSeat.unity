@@ -46365,6 +46365,8 @@ MonoBehaviour:
   - {fileID: 1818063085543392, guid: 359f3257470d77c4d8cc153e85295327, type: 3}
   - {fileID: 1799604412684304, guid: 77d00a211a2f4ca47a712d45e9817f55, type: 3}
   - {fileID: 1279074138043872, guid: 3a624992b0211e547a4af8d0dc785639, type: 3}
+  - {fileID: 1170968849949112, guid: 95e5214d95a1fa94ea0653c09332f1dd, type: 3}
+  - {fileID: 1207964688077868, guid: 2caaff396e8817442887d3f2a9eee4d4, type: 3}
   isAttackerTurn: 1
   attackerWin: {fileID: 1830386303388426, guid: c8c2c2fa766b3a34e802629c03d54590,
     type: 3}

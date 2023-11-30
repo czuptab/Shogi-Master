@@ -7,5 +7,7 @@ public enum PieceType
     Lance = 4,
     Rook = 5,
     Bishop = 6,
-    Pawn = 7
+    Pawn = 7,
+    RookPromoted = 8,
+    BishopPromoted = 9
 }

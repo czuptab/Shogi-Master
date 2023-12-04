@@ -6,6 +6,7 @@ public class BoardManager : MonoBehaviour {
     #region VARIABLES
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
+    private const int BOARD_SIZE = 9;
 
     public static BoardManager Instance { set; get; }
     public ShogiPiece[,] ShogiPieces { set; get; }
@@ -13,7 +14,7 @@ public class BoardManager : MonoBehaviour {
     [SerializeField] private List<GameObject> shogiPrefabs;
     [SerializeField] private GameObject attackerWin;
     [SerializeField] private GameObject defenderWin;
-    [SerializeField] private CameraController cameraController;
+    [SerializeField] private CameraManager cameraController;
 
     private bool[,] _allowedMoves { set; get; }
     private ShogiPiece _selectedShogiPiece;
@@ -34,7 +35,7 @@ public class BoardManager : MonoBehaviour {
 
     #endregion
 
-    #region UNITY METHODS
+    #region METHODS
     private void Start() {
         Instance = this;
         SpawnAllShogiPieces();
@@ -97,8 +98,8 @@ public class BoardManager : MonoBehaviour {
 
         bool hasAtleastOneMove = false;
         _allowedMoves = ShogiPieces[x, y].PossibleMove();
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
+        for (int i = 0; i < BOARD_SIZE; i++)
+            for (int j = 0; j < BOARD_SIZE; j++)
                 if (_allowedMoves[i, j])
                     hasAtleastOneMove = true;
 
@@ -107,7 +108,7 @@ public class BoardManager : MonoBehaviour {
    
         _selectedShogiPiece = ShogiPieces[x, y];
         _selectedShogiPiece.SelectPiece();
-        BoardHighlights.Instance.HighlightAllowedMoves(_allowedMoves);
+        HighlightManager.Instance.HighlightAllowedMoves(_allowedMoves);
     }
 
     private void MoveShogiPiece(int x, int y)
@@ -120,11 +121,12 @@ public class BoardManager : MonoBehaviour {
             {
                 // TODO:Capture a piece into new list
 
-                if (c.GetType() == typeof(King))
+                if (c.PieceType == PieceType.King)
                 {
                     EndGame();
                     return;
                 }
+
                 _activeShogiPieces.Remove(c.gameObject);
                 Destroy(c.gameObject);
             }
@@ -139,7 +141,7 @@ public class BoardManager : MonoBehaviour {
 
             _selectedShogiPiece.Move(x, y, GetTileCenter(x, y), moveDuration);
             
-            BoardHighlights.Instance.HideHighlights();
+            HighlightManager.Instance.HideHighlights();
         }
     }
 
@@ -150,7 +152,7 @@ public class BoardManager : MonoBehaviour {
             _activeShogiPieces.Remove(_selectedShogiPiece.gameObject);
             SpawnShogiPiece(_selectedShogiPiece.IsAttacker, _promotionMap[_selectedShogiPiece.PieceType], _selectedShogiPiece.CurrentX, _selectedShogiPiece.CurrentY);
             Destroy(_selectedShogiPiece.gameObject);
-            BoardHighlights.Instance.HideHighlights();
+            HighlightManager.Instance.HideHighlights();
         }
     }
 
@@ -214,7 +216,7 @@ public class BoardManager : MonoBehaviour {
 
     private void SpawnAllShogiPieces() {
         _activeShogiPieces = new List<GameObject>();
-        ShogiPieces = new ShogiPiece[9, 9];
+        ShogiPieces = new ShogiPiece[BOARD_SIZE, BOARD_SIZE];
 
         //Spawn attackers
 
@@ -242,7 +244,7 @@ public class BoardManager : MonoBehaviour {
         SpawnShogiPiece(true, PieceType.Bishop, 7, 1);
 
         //Pawns
-        for(int i = 0; i < 9; i++) {
+        for(int i = 0; i < BOARD_SIZE; i++) {
             SpawnShogiPiece(true, PieceType.Pawn, i, 2);
         }
 
@@ -273,7 +275,7 @@ public class BoardManager : MonoBehaviour {
         SpawnShogiPiece(false, PieceType.Bishop, 1, 7);
 
         //Pawns
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             SpawnShogiPiece(false, PieceType.Pawn, i, 6);
         }
     }
@@ -288,14 +290,14 @@ public class BoardManager : MonoBehaviour {
 
     private void DrawShogiBoard()
     {
-        Vector3 widthLine = Vector3.right * 9;
-        Vector3 heightLine = Vector3.forward * 9;
+        Vector3 widthLine = Vector3.right * BOARD_SIZE;
+        Vector3 heightLine = Vector3.forward * BOARD_SIZE;
 
-        for (int i = 0; i <= 9; i++)
+        for (int i = 0; i <= BOARD_SIZE; i++)
         {
             Vector3 start = Vector3.forward * i;
             Debug.DrawLine(start, start + widthLine);
-            for (int j = 0; j <= 9; j++)
+            for (int j = 0; j <= BOARD_SIZE; j++)
             {
                 start = Vector3.right * j;
                 Debug.DrawLine(start, start + heightLine);
@@ -326,7 +328,7 @@ public class BoardManager : MonoBehaviour {
             Destroy(go);
 
         isAttackerTurn = true;
-        BoardHighlights.Instance.HideHighlights();
+        HighlightManager.Instance.HideHighlights();
         SpawnAllShogiPieces();
     }
     

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BoardHighlights : MonoBehaviour {
-    public static BoardHighlights Instance { set; get; }
+public class HighlightManager : MonoBehaviour {
+    public static HighlightManager Instance { set; get; }
 
     public GameObject highlightPrefab;
     private List<GameObject> highlights;

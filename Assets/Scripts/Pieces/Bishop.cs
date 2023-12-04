@@ -1,7 +1,4 @@
-﻿using DG.Tweening;
-using UnityEngine;
-
-public class Bishop : ShogiPiece {
+﻿public class Bishop : ShogiPiece {
 
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
@@ -90,13 +87,5 @@ public class Bishop : ShogiPiece {
         }
 
         return r;
-    }
-
-    public override void Move(int x, int y, Vector3 tileCenter, float movementDuration)
-    {
-        transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
-            .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(x, y);
-            });
     }
 }

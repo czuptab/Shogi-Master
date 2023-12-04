@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 public abstract class ShogiPiece : MonoBehaviour {
     public int CurrentX { get; set; }
@@ -22,5 +23,11 @@ public abstract class ShogiPiece : MonoBehaviour {
         return new bool[9,9];
     }
 
-    public abstract void Move(int x, int y, Vector3 tileCenter, float movementDuration);
+    public virtual void Move(int x, int y, Vector3 tileCenter, float movementDuration)
+    {
+        transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
+            .OnComplete(() => {
+                BoardManager.Instance.CompleteMovement(x, y);
+            });
+    }
 }

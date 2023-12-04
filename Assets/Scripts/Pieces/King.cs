@@ -1,7 +1,4 @@
-﻿using DG.Tweening;
-using UnityEngine;
-
-public class King : ShogiPiece {
+﻿public class King : ShogiPiece {
     public override bool[,] PossibleMove() {
         bool[,] r = new bool[9, 9];
         ShogiPiece c;
@@ -60,13 +57,5 @@ public class King : ShogiPiece {
         }
 
         return r;
-    }
-
-    public override void Move(int x, int y, Vector3 tileCenter, float movementDuration)
-    {
-        transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
-            .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(x, y);
-            });
     }
 }

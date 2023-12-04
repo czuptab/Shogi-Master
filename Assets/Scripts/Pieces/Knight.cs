@@ -55,7 +55,7 @@ public class Knight : ShogiPiece {
         jumpMidpoint.y += 2;
 
         transform.DOPath(new Vector3[] { transform.position, jumpMidpoint, tileCenter }, movementDuration)
-        .SetEase(Ease.InOutQuad)
+        .SetEase(Ease.OutQuad)
         .OnComplete(() => {
             BoardManager.Instance.CompleteMovement(x, y);
         });

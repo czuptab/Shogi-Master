@@ -1,33 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Purchasing;
 
 public class BoardManager : MonoBehaviour {
     #region VARIABLES
-
-    public static BoardManager Instance { set; get; }
-    private bool[,] allowedMoves { set; get; }
-
-    public ShogiPiece[,] ShogiPieces { set; get; }
-    private ShogiPiece selectedShogiPiece;
-
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
 
-    private int selectionX = -1;
-    private int selectionY = -1;
+    public static BoardManager Instance { set; get; }
+    public ShogiPiece[,] ShogiPieces { set; get; }
 
     [SerializeField] private List<GameObject> shogiPrefabs;
-    private List<GameObject> activeShogiPieces;
+    [SerializeField] private GameObject attackerWin;
+    [SerializeField] private GameObject defenderWin;
+    [SerializeField] private CameraController cameraController;
 
-    public bool isAttackerTurn = true;
+    private bool[,] _allowedMoves { set; get; }
+    private ShogiPiece _selectedShogiPiece;
+    private int _selectionX = -1;
+    private int _selectionY = -1;
+    private List<GameObject> _activeShogiPieces;
+    private bool isAttackerTurn = true;
 
-    public GameObject attackerWin;
-    public GameObject defenderWin;
-
-    public CameraController cameraController;
-
-    public Dictionary<PieceType, PieceType> PromotionMap = new()
+    private Dictionary<PieceType, PieceType> _promotionMap = new()
     {
         { PieceType.Lance, PieceType.GoldGeneral },
         { PieceType.Pawn, PieceType.GoldGeneral },
@@ -47,31 +42,50 @@ public class BoardManager : MonoBehaviour {
 
     private void Update()
     {
-        UpdateSelection();
-        DrawShogiBoard();
+        HandleInput();
+    }
 
-        if(Input.GetMouseButtonDown(0)) {
-            if(selectionX >= 0 && selectionY >= 0) {
-                if(selectedShogiPiece == null) {
-                    //Select the shogiman
-                    SelectShogiPiece(selectionX, selectionY);
-                } else {
-                    //Move the shogiman
-                    MoveShogiPiece(selectionX, selectionY);
-                }
-            }
+    private void HandleInput()
+    {
+        UpdateSelection();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            HandleLeftClick();
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            if (selectionX >= 0 && selectionY >= 0)
+            HandleRightClick();
+        }
+    }
+
+    private void HandleLeftClick()
+    {
+        if (IsValidSelection())
+        {
+            if (_selectedShogiPiece == null)
             {
-                if (selectedShogiPiece != null)
-                {
-                    PromoteShogiPiece();
-                }
+                SelectShogiPiece(_selectionX, _selectionY);
+            }
+            else
+            {
+                MoveShogiPiece(_selectionX, _selectionY);
             }
         }
+    }
+
+    private void HandleRightClick()
+    {
+        if (IsValidSelection() && _selectedShogiPiece != null)
+        {
+            PromoteShogiPiece();
+        }
+    }
+
+    private bool IsValidSelection()
+    {
+        return _selectionX >= 0 && _selectionY >= 0;
     }
 
     private void SelectShogiPiece(int x, int y) {
@@ -82,23 +96,23 @@ public class BoardManager : MonoBehaviour {
             return;
 
         bool hasAtleastOneMove = false;
-        allowedMoves = ShogiPieces[x, y].PossibleMove();
+        _allowedMoves = ShogiPieces[x, y].PossibleMove();
         for (int i = 0; i < 9; i++)
             for (int j = 0; j < 9; j++)
-                if (allowedMoves[i, j])
+                if (_allowedMoves[i, j])
                     hasAtleastOneMove = true;
 
         if (!hasAtleastOneMove)
             return;
    
-        selectedShogiPiece = ShogiPieces[x, y];
-        selectedShogiPiece.SelectPiece();
-        BoardHighlights.Instance.HighlightAllowedMoves(allowedMoves);
+        _selectedShogiPiece = ShogiPieces[x, y];
+        _selectedShogiPiece.SelectPiece();
+        BoardHighlights.Instance.HighlightAllowedMoves(_allowedMoves);
     }
 
     private void MoveShogiPiece(int x, int y)
     {
-        if (allowedMoves[x, y])
+        if (_allowedMoves[x, y])
         {
             ShogiPiece c = ShogiPieces[x, y];
 
@@ -111,20 +125,19 @@ public class BoardManager : MonoBehaviour {
                     EndGame();
                     return;
                 }
-                activeShogiPieces.Remove(c.gameObject);
+                _activeShogiPieces.Remove(c.gameObject);
                 Destroy(c.gameObject);
             }
 
-            ShogiPieces[selectedShogiPiece.CurrentX, selectedShogiPiece.CurrentY] = null;
+            ShogiPieces[_selectedShogiPiece.CurrentX, _selectedShogiPiece.CurrentY] = null;
 
-            int distanceX = Mathf.Abs(x - selectedShogiPiece.CurrentX);
-            int distanceY = Mathf.Abs(y - selectedShogiPiece.CurrentY);
-            //todo: pitagoras, not sum
-            int totalDistance = distanceX + distanceY;
+            int distanceX = Mathf.Abs(x - _selectedShogiPiece.CurrentX);
+            int distanceY = Mathf.Abs(y - _selectedShogiPiece.CurrentY);
+            double totalDistance = Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
 
-            float moveDuration = totalDistance * 0.5f;
+            float moveDuration = (float)(totalDistance * 0.5f);
 
-            selectedShogiPiece.Move(x, y, GetTileCenter(x, y), moveDuration);
+            _selectedShogiPiece.Move(x, y, GetTileCenter(x, y), moveDuration);
             
             BoardHighlights.Instance.HideHighlights();
         }
@@ -132,18 +145,18 @@ public class BoardManager : MonoBehaviour {
 
     private void PromoteShogiPiece()
     {
-        if(ShouldPromote(selectedShogiPiece))
+        if(ShouldPromote(_selectedShogiPiece))
         {
-            activeShogiPieces.Remove(selectedShogiPiece.gameObject);
-            SpawnShogiPiece(selectedShogiPiece.IsAttacker, PromotionMap[selectedShogiPiece.PieceType], selectedShogiPiece.CurrentX, selectedShogiPiece.CurrentY);
-            Destroy(selectedShogiPiece.gameObject);
+            _activeShogiPieces.Remove(_selectedShogiPiece.gameObject);
+            SpawnShogiPiece(_selectedShogiPiece.IsAttacker, _promotionMap[_selectedShogiPiece.PieceType], _selectedShogiPiece.CurrentX, _selectedShogiPiece.CurrentY);
+            Destroy(_selectedShogiPiece.gameObject);
             BoardHighlights.Instance.HideHighlights();
         }
     }
 
     private bool ShouldPromote(ShogiPiece shogiPiece)
     {
-        if (PromotionMap.ContainsKey(shogiPiece.PieceType) &&
+        if (_promotionMap.ContainsKey(shogiPiece.PieceType) &&
            (shogiPiece.IsAttacker && shogiPiece.CurrentY >= 6) || (!shogiPiece.IsAttacker && shogiPiece.CurrentY <= 2) &&
            shogiPiece.IsAttacker == isAttackerTurn)
         {
@@ -155,13 +168,13 @@ public class BoardManager : MonoBehaviour {
 
     public void CompleteMovement(int x, int y)
     {
-        selectedShogiPiece.SetPosition(x, y);
-        ShogiPieces[x, y] = selectedShogiPiece;
+        _selectedShogiPiece.SetPosition(x, y);
+        ShogiPieces[x, y] = _selectedShogiPiece;
         if (
-          ((selectedShogiPiece.PieceType == PieceType.Pawn || selectedShogiPiece.PieceType == PieceType.Lance) &&
-          (selectedShogiPiece.IsAttacker && selectedShogiPiece.CurrentY >= 8) || (!selectedShogiPiece.IsAttacker && y <= 0)) ||
-          (selectedShogiPiece.PieceType == PieceType.Knight &&
-          (selectedShogiPiece.IsAttacker && selectedShogiPiece.CurrentY >= 7) || (!selectedShogiPiece.IsAttacker && y <= 1))
+          ((_selectedShogiPiece.PieceType == PieceType.Pawn || _selectedShogiPiece.PieceType == PieceType.Lance) &&
+          (_selectedShogiPiece.IsAttacker && _selectedShogiPiece.CurrentY >= 8) || (!_selectedShogiPiece.IsAttacker && y <= 0)) ||
+          (_selectedShogiPiece.PieceType == PieceType.Knight &&
+          (_selectedShogiPiece.IsAttacker && _selectedShogiPiece.CurrentY >= 7) || (!_selectedShogiPiece.IsAttacker && y <= 1))
         )
         {
             PromoteShogiPiece();
@@ -169,7 +182,7 @@ public class BoardManager : MonoBehaviour {
 
         isAttackerTurn = !isAttackerTurn;
 
-        selectedShogiPiece = null;
+        _selectedShogiPiece = null;
         cameraController.RotateCamera(180f);
     }
 
@@ -179,11 +192,11 @@ public class BoardManager : MonoBehaviour {
 
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ShogiPlane"))) {
-            selectionX = (int)hit.point.x;
-            selectionY = (int)hit.point.z;
+            _selectionX = (int)hit.point.x;
+            _selectionY = (int)hit.point.z;
         } else {
-            selectionX = -1;
-            selectionY = -1;
+            _selectionX = -1;
+            _selectionY = -1;
         }
     }
 
@@ -196,11 +209,11 @@ public class BoardManager : MonoBehaviour {
         shogiPiece.PieceType = pieceType;
         ShogiPieces[x, y] = go.GetComponent<ShogiPiece>();
         ShogiPieces[x, y].SetPosition(x, y);
-        activeShogiPieces.Add(go);
+        _activeShogiPieces.Add(go);
     }
 
     private void SpawnAllShogiPieces() {
-        activeShogiPieces = new List<GameObject>();
+        _activeShogiPieces = new List<GameObject>();
         ShogiPieces = new ShogiPiece[9, 9];
 
         //Spawn attackers
@@ -289,15 +302,14 @@ public class BoardManager : MonoBehaviour {
             }
         }
 
-        // Draw the selection
-        if(selectionX >=0 && selectionY >=0) {
+        if(IsValidSelection()) {
             Debug.DrawLine(
-                Vector3.forward * selectionY + Vector3.right * selectionX,
-                Vector3.forward * (selectionY + 1) + Vector3.right * (selectionX + 1));
+                Vector3.forward * _selectionY + Vector3.right * _selectionX,
+                Vector3.forward * (_selectionY + 1) + Vector3.right * (_selectionX + 1));
 
             Debug.DrawLine(
-                Vector3.forward * (selectionY + 1) + Vector3.right * selectionX,
-                Vector3.forward * selectionY + Vector3.right * (selectionX + 1));
+                Vector3.forward * (_selectionY + 1) + Vector3.right * _selectionX,
+                Vector3.forward * _selectionY + Vector3.right * (_selectionX + 1));
         }
     }
 
@@ -310,7 +322,7 @@ public class BoardManager : MonoBehaviour {
             Destroy(win, 2);
         }
 
-        foreach (GameObject go in activeShogiPieces)
+        foreach (GameObject go in _activeShogiPieces)
             Destroy(go);
 
         isAttackerTurn = true;

@@ -25,7 +25,7 @@ public class BoardController : MonoBehaviour {
     private bool isAttackerTurn = true;
     private Dictionary<PieceType, GameObject> shogiPrefabsDictionary;
 
-    private Dictionary<PieceType, PieceType> _promotionMap = new()
+    private readonly Dictionary<PieceType, PieceType> _promotionMap = new()
     {
         { PieceType.Lance, PieceType.GoldGeneral },
         { PieceType.Pawn, PieceType.GoldGeneral },

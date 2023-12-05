@@ -1,8 +1,12 @@
+using Assets.Scripts.Enum;
 using UnityEngine;
 
-[System.Serializable]
-public class PiecePrefabPair
+namespace Assets.Scripts.Helpers
 {
-    public PieceType pieceType;
-    public GameObject prefab;
+	[System.Serializable]
+	public class PiecePrefabPair
+	{
+		public PieceType pieceType;
+		public GameObject prefab;
+	} 
 }

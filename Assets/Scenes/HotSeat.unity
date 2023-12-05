@@ -46432,22 +46432,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59432a2585f7c654788586eef4d04e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shogiPrefabsList:
-  - pieceType: 0
-    prefab: {fileID: 0}
   cameraController: {fileID: 534669907}
   inputController: {fileID: 1429891047}
-  shogiPrefabs:
-  - {fileID: 1652717202643828, guid: ab1d0700e5efceb4dbb5d30859cbf775, type: 3}
-  - {fileID: 1627194253424536, guid: 6cfaf7353043a244eb0b1d8050400415, type: 3}
-  - {fileID: 1139576183322630, guid: 2238f6025e0ca164a89d7d5b105bf3fe, type: 3}
-  - {fileID: 1339219343930804, guid: 8dcf7f142d3c2a64a96a3b62f005244b, type: 3}
-  - {fileID: 5766571776060564145, guid: ed7c9d08e426a2f498ddc43545d90792, type: 3}
-  - {fileID: 1818063085543392, guid: 359f3257470d77c4d8cc153e85295327, type: 3}
-  - {fileID: 1799604412684304, guid: 77d00a211a2f4ca47a712d45e9817f55, type: 3}
-  - {fileID: 1279074138043872, guid: 3a624992b0211e547a4af8d0dc785639, type: 3}
-  - {fileID: 1170968849949112, guid: 95e5214d95a1fa94ea0653c09332f1dd, type: 3}
-  - {fileID: 1207964688077868, guid: 2caaff396e8817442887d3f2a9eee4d4, type: 3}
+  shogiPrefabsList:
+  - pieceType: 0
+    prefab: {fileID: 1652717202643828, guid: ab1d0700e5efceb4dbb5d30859cbf775, type: 3}
+  - pieceType: 1
+    prefab: {fileID: 1627194253424536, guid: 6cfaf7353043a244eb0b1d8050400415, type: 3}
+  - pieceType: 2
+    prefab: {fileID: 1139576183322630, guid: 2238f6025e0ca164a89d7d5b105bf3fe, type: 3}
+  - pieceType: 3
+    prefab: {fileID: 1339219343930804, guid: 8dcf7f142d3c2a64a96a3b62f005244b, type: 3}
+  - pieceType: 4
+    prefab: {fileID: 5766571776060564145, guid: ed7c9d08e426a2f498ddc43545d90792,
+      type: 3}
+  - pieceType: 5
+    prefab: {fileID: 1818063085543392, guid: 359f3257470d77c4d8cc153e85295327, type: 3}
+  - pieceType: 6
+    prefab: {fileID: 1799604412684304, guid: 77d00a211a2f4ca47a712d45e9817f55, type: 3}
+  - pieceType: 7
+    prefab: {fileID: 1279074138043872, guid: 3a624992b0211e547a4af8d0dc785639, type: 3}
+  - pieceType: 8
+    prefab: {fileID: 1170968849949112, guid: 95e5214d95a1fa94ea0653c09332f1dd, type: 3}
+  - pieceType: 9
+    prefab: {fileID: 1207964688077868, guid: 2caaff396e8817442887d3f2a9eee4d4, type: 3}
   attackerWin: {fileID: 1830386303388426, guid: c8c2c2fa766b3a34e802629c03d54590,
     type: 3}
   defenderWin: {fileID: 1621561222279158, guid: b1fb81906119aa741ab1a5ce8d78e5f7,

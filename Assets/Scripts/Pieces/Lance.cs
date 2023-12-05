@@ -1,47 +1,62 @@
-﻿public class Lance : ShogiPiece {
-    public override bool[,] PossibleMove() {
-        bool[,] r = new bool[9, 9];
-        ShogiPiece c;
-        int i;
-        
-        if (IsAttacker) {
-            i = CurrentY;
-            while (true) {
-                i++;
-                if (i >= 9)
-                    break;
+﻿using Assets.Scripts.Controllers;
 
-                c = BoardController.Instance.ShogiPieces[CurrentX, i];
-                if (c == null)
-                    r[CurrentX, i] = true;
-                else {
-                    if (c.IsAttacker != IsAttacker)
+namespace Assets.Scripts.Pieces
+{
+    public class Lance : ShogiPiece
+    {
+        public override bool[,] PossibleMove()
+        {
+            bool[,] r = new bool[9, 9];
+            ShogiPiece c;
+            int i;
+
+            if (IsAttacker)
+            {
+                i = CurrentY;
+                while (true)
+                {
+                    i++;
+                    if (i >= 9)
+                        break;
+
+                    c = BoardController.Instance.ShogiPieces[CurrentX, i];
+                    if (c == null)
                         r[CurrentX, i] = true;
+                    else
+                    {
+                        if (c.IsAttacker != IsAttacker)
+                            r[CurrentX, i] = true;
 
-                    break;
+                        break;
+                    }
                 }
             }
-        } else {
-            i = CurrentY;
-            while (true) {
-                
-                i--;
-                if (i <0)
-                    break;
+            else
+            {
+                i = CurrentY;
+                while (true)
+                {
 
-                c = BoardController.Instance.ShogiPieces[CurrentX, i];
-                if (c == null)
-                    r[CurrentX, i] = true;
-                else {
-                    if (c.IsAttacker != IsAttacker)
+                    i--;
+                    if (i < 0)
+                        break;
+
+                    c = BoardController.Instance.ShogiPieces[CurrentX, i];
+                    if (c == null)
                         r[CurrentX, i] = true;
+                    else
+                    {
+                        if (c.IsAttacker != IsAttacker)
+                            r[CurrentX, i] = true;
 
-                    break;
+                        break;
+                    }
                 }
             }
+
+
+            return r;
         }
-        
-
-        return r;
     }
+
 }

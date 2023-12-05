@@ -1,91 +1,107 @@
-﻿public class Bishop : ShogiPiece {
+﻿using Assets.Scripts.Controllers;
 
-    public override bool[,] PossibleMove() {
-        bool[,] r = new bool[9, 9];
+namespace Assets.Scripts.Pieces
+{
+    public class Bishop : ShogiPiece
+    {
 
-        ShogiPiece c;
-        int i, j;
+        public override bool[,] PossibleMove()
+        {
+            bool[,] r = new bool[9, 9];
 
-        // Top Left
-        i = CurrentX;
-        j = CurrentY;
-        while (true) {
-            i--;
-            j++;
-            if (i < 0 || j >= 9)
-                break;
+            ShogiPiece c;
+            int i, j;
 
-            c = BoardController.Instance.ShogiPieces[i, j];
-            if (c == null)
-                r[i, j] = true;
-            else {
-                if (IsAttacker != c.IsAttacker)
+            // Top Left
+            i = CurrentX;
+            j = CurrentY;
+            while (true)
+            {
+                i--;
+                j++;
+                if (i < 0 || j >= 9)
+                    break;
+
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null)
                     r[i, j] = true;
+                else
+                {
+                    if (IsAttacker != c.IsAttacker)
+                        r[i, j] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        // Top Right
-        i = CurrentX;
-        j = CurrentY;
-        while (true) {
-            i++;
-            j++;
-            if (i >= 9 || j >= 9)
-                break;
+            // Top Right
+            i = CurrentX;
+            j = CurrentY;
+            while (true)
+            {
+                i++;
+                j++;
+                if (i >= 9 || j >= 9)
+                    break;
 
-            c = BoardController.Instance.ShogiPieces[i, j];
-            if (c == null)
-                r[i, j] = true;
-            else {
-                if (IsAttacker != c.IsAttacker)
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null)
                     r[i, j] = true;
+                else
+                {
+                    if (IsAttacker != c.IsAttacker)
+                        r[i, j] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        // Down Left
-        i = CurrentX;
-        j = CurrentY;
-        while (true) {
-            i--;
-            j--;
-            if (i < 0 || j < 0)
-                break;
+            // Down Left
+            i = CurrentX;
+            j = CurrentY;
+            while (true)
+            {
+                i--;
+                j--;
+                if (i < 0 || j < 0)
+                    break;
 
-            c = BoardController.Instance.ShogiPieces[i, j];
-            if (c == null)
-                r[i, j] = true;
-            else {
-                if (IsAttacker != c.IsAttacker)
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null)
                     r[i, j] = true;
+                else
+                {
+                    if (IsAttacker != c.IsAttacker)
+                        r[i, j] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        // Down Right
-        i = CurrentX;
-        j = CurrentY;
-        while (true) {
-            i++;
-            j--;
-            if (i >= 9 || j < 0)
-                break;
+            // Down Right
+            i = CurrentX;
+            j = CurrentY;
+            while (true)
+            {
+                i++;
+                j--;
+                if (i >= 9 || j < 0)
+                    break;
 
-            c = BoardController.Instance.ShogiPieces[i, j];
-            if (c == null)
-                r[i, j] = true;
-            else {
-                if (IsAttacker != c.IsAttacker)
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null)
                     r[i, j] = true;
+                else
+                {
+                    if (IsAttacker != c.IsAttacker)
+                        r[i, j] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        return r;
+            return r;
+        }
     }
+
 }

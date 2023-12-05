@@ -1,38 +1,42 @@
-﻿using DG.Tweening;
-using UnityEngine;
+﻿using Assets.Scripts.Controllers;
 
-public class Pawn : ShogiPiece {
-    public override bool[,] PossibleMove() {
-        bool[,] r = new bool[9, 9];
-        ShogiPiece c;
-
-        //Attacker team move
-        if(IsAttacker) {
-            if(CurrentY != 8) {
-                c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY + 1];
-                if(c == null || !c.IsAttacker) {
-                    r[CurrentX, CurrentY + 1] = true;
-                }
-            }
-        } else {
-            //Defender team move
-            if (CurrentY != 0) {
-                c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY - 1];
-                if (c == null || c.IsAttacker) {
-                    r[CurrentX, CurrentY - 1] = true;
-                    
-                }
-            }
-        }
-
-        return r;
-    }
-
-    public override void Move(int x, int y, Vector3 tileCenter, float movementDuration)
+namespace Assets.Scripts.Pieces
+{
+    public class Pawn : ShogiPiece
     {
-        transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
-            .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(x, y);
-            });
+        public override bool[,] PossibleMove()
+        {
+            bool[,] r = new bool[9, 9];
+            ShogiPiece c;
+
+            //Attacker team move
+            if (IsAttacker)
+            {
+                if (CurrentY != 8)
+                {
+                    c = BoardController.Instance.ShogiPieces[CurrentX, CurrentY + 1];
+                    if (c == null || !c.IsAttacker)
+                    {
+                        r[CurrentX, CurrentY + 1] = true;
+                    }
+                }
+            }
+            else
+            {
+                //Defender team move
+                if (CurrentY != 0)
+                {
+                    c = BoardController.Instance.ShogiPieces[CurrentX, CurrentY - 1];
+                    if (c == null || c.IsAttacker)
+                    {
+                        r[CurrentX, CurrentY - 1] = true;
+
+                    }
+                }
+            }
+
+            return r;
+        }
     }
+
 }

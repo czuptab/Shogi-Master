@@ -1,150 +1,145 @@
-using DG.Tweening;
-using UnityEngine;
+using Assets.Scripts.Controllers;
 
-public class RookPromoted : ShogiPiece
+namespace Assets.Scripts.Pieces
 {
-    public override bool[,] PossibleMove()
+    public class RookPromoted : ShogiPiece
     {
-        bool[,] r = new bool[9, 9];
-        ShogiPiece c;
-        int i;
-
-        //Right
-        i = CurrentX;
-        while (true)
+        public override bool[,] PossibleMove()
         {
-            i++;
-            if (i >= 9)
-                break;
+            bool[,] r = new bool[9, 9];
+            ShogiPiece c;
+            int i;
 
-            c = BoardManager.Instance.ShogiPieces[i, CurrentY];
-            if (c == null)
-                r[i, CurrentY] = true;
-            else
+            //Right
+            i = CurrentX;
+            while (true)
             {
-                if (c.IsAttacker != IsAttacker)
+                i++;
+                if (i >= 9)
+                    break;
+
+                c = BoardController.Instance.ShogiPieces[i, CurrentY];
+                if (c == null)
                     r[i, CurrentY] = true;
+                else
+                {
+                    if (c.IsAttacker != IsAttacker)
+                        r[i, CurrentY] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        //Left
-        i = CurrentX;
-        while (true)
-        {
-            i--;
-            if (i < 0)
-                break;
-
-            c = BoardManager.Instance.ShogiPieces[i, CurrentY];
-            if (c == null)
-                r[i, CurrentY] = true;
-            else
+            //Left
+            i = CurrentX;
+            while (true)
             {
-                if (c.IsAttacker != IsAttacker)
+                i--;
+                if (i < 0)
+                    break;
+
+                c = BoardController.Instance.ShogiPieces[i, CurrentY];
+                if (c == null)
                     r[i, CurrentY] = true;
+                else
+                {
+                    if (c.IsAttacker != IsAttacker)
+                        r[i, CurrentY] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        //Up
-        i = CurrentY;
-        while (true)
-        {
-            i++;
-            if (i >= 9)
-                break;
-
-            c = BoardManager.Instance.ShogiPieces[CurrentX, i];
-            if (c == null)
-                r[CurrentX, i] = true;
-            else
+            //Up
+            i = CurrentY;
+            while (true)
             {
-                if (c.IsAttacker != IsAttacker)
+                i++;
+                if (i >= 9)
+                    break;
+
+                c = BoardController.Instance.ShogiPieces[CurrentX, i];
+                if (c == null)
                     r[CurrentX, i] = true;
+                else
+                {
+                    if (c.IsAttacker != IsAttacker)
+                        r[CurrentX, i] = true;
 
-                break;
+                    break;
+                }
             }
-        }
 
-        //Down
-        i = CurrentY;
-        while (true)
-        {
+            //Down
+            i = CurrentY;
+            while (true)
+            {
+                i--;
+                if (i < 0)
+                    break;
+
+                c = BoardController.Instance.ShogiPieces[CurrentX, i];
+                if (c == null)
+                    r[CurrentX, i] = true;
+                else
+                {
+                    if (c.IsAttacker != IsAttacker)
+                        r[CurrentX, i] = true;
+
+                    break;
+                }
+            }
+
+            // Top Left
+            i = CurrentX;
+            int j = CurrentY;
             i--;
-            if (i < 0)
-                break;
-
-            c = BoardManager.Instance.ShogiPieces[CurrentX, i];
-            if (c == null)
-                r[CurrentX, i] = true;
-            else
+            j++;
+            if (i >= 0 && j < 9)
             {
-                if (c.IsAttacker != IsAttacker)
-                    r[CurrentX, i] = true;
-
-                break;
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null || c.IsAttacker != IsAttacker)
+                    r[i, j] = true;
             }
-        }
 
-        // Top Left
-        i = CurrentX;
-        int j = CurrentY;
-        i--;
-        j++;
-        if (i >= 0 && j < 9)
-        {
-            c = BoardManager.Instance.ShogiPieces[i, j];
-            if (c == null || c.IsAttacker != IsAttacker)
-                r[i, j] = true;
-        }
+            // Top Right
+            i = CurrentX;
+            j = CurrentY;
+            i++;
+            j++;
+            if (i < 9 && j < 9)
+            {
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null || c.IsAttacker != IsAttacker)
+                    r[i, j] = true;
+            }
 
-        // Top Right
-        i = CurrentX;
-        j = CurrentY;
-        i++;
-        j++;
-        if (i < 9 && j < 9)
-        {
-            c = BoardManager.Instance.ShogiPieces[i, j];
-            if (c == null || c.IsAttacker != IsAttacker)
-                r[i, j] = true;
-        }
+            // Down Left
+            i = CurrentX;
+            j = CurrentY;
+            i--;
+            j--;
+            if (i >= 0 && j >= 0)
+            {
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null || c.IsAttacker != IsAttacker)
+                    r[i, j] = true;
+            }
 
-        // Down Left
-        i = CurrentX;
-        j = CurrentY;
-        i--;
-        j--;
-        if (i >= 0 && j >= 0)
-        {
-            c = BoardManager.Instance.ShogiPieces[i, j];
-            if (c == null || c.IsAttacker != IsAttacker)
-                r[i, j] = true;
-        }
+            // Down Right
+            i = CurrentX;
+            j = CurrentY;
+            i++;
+            j--;
+            if (i < 9 && j >= 0)
+            {
+                c = BoardController.Instance.ShogiPieces[i, j];
+                if (c == null || c.IsAttacker != IsAttacker)
+                    r[i, j] = true;
+            }
 
-        // Down Right
-        i = CurrentX;
-        j = CurrentY;
-        i++;
-        j--;
-        if (i < 9 && j >= 0)
-        {
-            c = BoardManager.Instance.ShogiPieces[i, j];
-            if (c == null || c.IsAttacker != IsAttacker)
-                r[i, j] = true;
+            return r;
         }
-
-        return r;
     }
 
-    public override void Move(int x, int y, Vector3 tileCenter, float movementDuration)
-    {
-        transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
-            .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(x, y);
-            });
-    }
 }

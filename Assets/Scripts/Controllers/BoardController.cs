@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour {
+public class BoardController : MonoBehaviour {
     #region VARIABLES
     private const float TILE_SIZE = 1.0f;
     private const float TILE_OFFSET = 0.5f;
     private const int BOARD_SIZE = 9;
 
-    public static BoardManager Instance { set; get; }
+    public static BoardController Instance { set; get; }
     public ShogiPiece[,] ShogiPieces { set; get; }
 
-    [SerializeField] private List<GameObject> shogiPrefabs;
+    [SerializeField] private CameraController cameraController;
+    [SerializeField] private InputController inputController;
+    [SerializeField] private List<PiecePrefabPair> shogiPrefabsList;
     [SerializeField] private GameObject attackerWin;
     [SerializeField] private GameObject defenderWin;
-    [SerializeField] private CameraManager cameraController;
 
     private bool[,] _allowedMoves { set; get; }
     private ShogiPiece _selectedShogiPiece;
@@ -22,6 +23,7 @@ public class BoardManager : MonoBehaviour {
     private int _selectionY = -1;
     private List<GameObject> _activeShogiPieces;
     private bool isAttackerTurn = true;
+    private Dictionary<PieceType, GameObject> shogiPrefabsDictionary;
 
     private Dictionary<PieceType, PieceType> _promotionMap = new()
     {
@@ -41,74 +43,74 @@ public class BoardManager : MonoBehaviour {
         SpawnAllShogiPieces();
     }
 
-    private void Update()
+    private void Awake()
     {
-        HandleInput();
+        inputController.OnSelect += HandleSelectShogiPiece;
+        inputController.OnPromote += HandlePromoteShogiPiece;
+        InitializePrefabDictionary();
     }
 
-    private void HandleInput()
+    private void HandleSelectShogiPiece(Vector2Int boardPosition)
     {
-        UpdateSelection();
+        int x = boardPosition.x;
+        int y = boardPosition.y;
 
-        if (Input.GetMouseButtonDown(0))
+        // If a piece is already selected, attempt to move it
+        if (_selectedShogiPiece != null)
         {
-            HandleLeftClick();
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            HandleRightClick();
-        }
-    }
-
-    private void HandleLeftClick()
-    {
-        if (IsValidSelection())
-        {
-            if (_selectedShogiPiece == null)
+            if (_allowedMoves[x, y])
             {
-                SelectShogiPiece(_selectionX, _selectionY);
+                MoveShogiPiece(x, y);
+                //_selectedShogiPiece = null;
+                _allowedMoves = null;
             }
-            else
-            {
-                MoveShogiPiece(_selectionX, _selectionY);
-            }
+            return;
         }
+
+        // If no piece is selected, handle selection
+        ShogiPiece selectedPiece = ShogiPieces[x, y];
+        if (selectedPiece == null || selectedPiece.IsAttacker != isAttackerTurn)
+            return;
+
+        bool hasAtLeastOneMove = CheckForPossibleMoves(selectedPiece);
+        if (!hasAtLeastOneMove)
+            return;
+
+        _selectedShogiPiece = selectedPiece;
+        _selectedShogiPiece.SelectPiece();
+        HighlightController.Instance.HighlightAllowedMoves(_allowedMoves);
     }
 
-    private void HandleRightClick()
+    private bool CheckForPossibleMoves(ShogiPiece piece)
     {
-        if (IsValidSelection() && _selectedShogiPiece != null)
+        _allowedMoves = piece.PossibleMove();
+        for (int i = 0; i < BOARD_SIZE; i++)
         {
-            PromoteShogiPiece();
+            for (int j = 0; j < BOARD_SIZE; j++)
+            {
+                if (_allowedMoves[i, j])
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void HandlePromoteShogiPiece(Vector2Int boardPosition)
+    {
+        if (_selectedShogiPiece != null && ShouldPromote(_selectedShogiPiece))
+        {
+            _activeShogiPieces.Remove(_selectedShogiPiece.gameObject);
+            SpawnShogiPiece(_selectedShogiPiece.IsAttacker, _promotionMap[_selectedShogiPiece.PieceType], _selectedShogiPiece.CurrentX, _selectedShogiPiece.CurrentY);
+            Destroy(_selectedShogiPiece.gameObject);
+            HighlightController.Instance.HideHighlights();
         }
     }
 
     private bool IsValidSelection()
     {
         return _selectionX >= 0 && _selectionY >= 0;
-    }
-
-    private void SelectShogiPiece(int x, int y) {
-        if (ShogiPieces[x, y] == null)
-            return;
-
-        if (ShogiPieces[x, y].IsAttacker != isAttackerTurn)
-            return;
-
-        bool hasAtleastOneMove = false;
-        _allowedMoves = ShogiPieces[x, y].PossibleMove();
-        for (int i = 0; i < BOARD_SIZE; i++)
-            for (int j = 0; j < BOARD_SIZE; j++)
-                if (_allowedMoves[i, j])
-                    hasAtleastOneMove = true;
-
-        if (!hasAtleastOneMove)
-            return;
-   
-        _selectedShogiPiece = ShogiPieces[x, y];
-        _selectedShogiPiece.SelectPiece();
-        HighlightManager.Instance.HighlightAllowedMoves(_allowedMoves);
     }
 
     private void MoveShogiPiece(int x, int y)
@@ -141,7 +143,24 @@ public class BoardManager : MonoBehaviour {
 
             _selectedShogiPiece.Move(x, y, GetTileCenter(x, y), moveDuration);
             
-            HighlightManager.Instance.HideHighlights();
+            HighlightController.Instance.HideHighlights();
+            LogBoardState();
+        }
+    }
+
+    private void InitializePrefabDictionary()
+    {
+        shogiPrefabsDictionary = new Dictionary<PieceType, GameObject>();
+        foreach (PiecePrefabPair pair in shogiPrefabsList)
+        {
+            if (pair.prefab != null)
+            {
+                shogiPrefabsDictionary[pair.pieceType] = pair.prefab;
+            }
+            else
+            {
+                Debug.LogWarning("Prefab for " + pair.pieceType + " is not set.");
+            }
         }
     }
 
@@ -152,7 +171,7 @@ public class BoardManager : MonoBehaviour {
             _activeShogiPieces.Remove(_selectedShogiPiece.gameObject);
             SpawnShogiPiece(_selectedShogiPiece.IsAttacker, _promotionMap[_selectedShogiPiece.PieceType], _selectedShogiPiece.CurrentX, _selectedShogiPiece.CurrentY);
             Destroy(_selectedShogiPiece.gameObject);
-            HighlightManager.Instance.HideHighlights();
+            HighlightController.Instance.HideHighlights();
         }
     }
 
@@ -188,23 +207,9 @@ public class BoardManager : MonoBehaviour {
         cameraController.RotateCamera(180f);
     }
 
-    private void UpdateSelection() {
-        if (!Camera.main)
-            return;
-
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25.0f, LayerMask.GetMask("ShogiPlane"))) {
-            _selectionX = (int)hit.point.x;
-            _selectionY = (int)hit.point.z;
-        } else {
-            _selectionX = -1;
-            _selectionY = -1;
-        }
-    }
-
     private void SpawnShogiPiece(bool isAttacker, PieceType pieceType, int x, int y)
     {
-        GameObject go = Instantiate(shogiPrefabs[(int)pieceType], GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
+        GameObject go = Instantiate(shogiPrefabsDictionary[pieceType], GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
         go.transform.SetParent(transform);
         ShogiPiece shogiPiece = go.GetComponent<ShogiPiece>();
         shogiPiece.IsAttacker = isAttacker;
@@ -328,9 +333,34 @@ public class BoardManager : MonoBehaviour {
             Destroy(go);
 
         isAttackerTurn = true;
-        HighlightManager.Instance.HideHighlights();
+        HighlightController.Instance.HideHighlights();
         SpawnAllShogiPieces();
     }
-    
+
+    public void LogBoardState()
+    {
+        string boardState = "Board State:\n";
+
+        for (int y = 0; y < BOARD_SIZE; y++)
+        {
+            for (int x = 0; x < BOARD_SIZE; x++)
+            {
+                boardState += ShogiPieces[x, y] == null ? "0 " : "1 ";
+            }
+            boardState += "\n";
+        }
+
+        Debug.Log(boardState);
+    }
+
+    private void OnDestroy()
+    {
+        if(inputController != null)
+        {
+            inputController.OnSelect -= HandleSelectShogiPiece;
+            inputController.OnPromote -= HandlePromoteShogiPiece;
+        }
+    }
+
     #endregion
 }

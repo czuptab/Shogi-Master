@@ -10,7 +10,7 @@ public class Knight : ShogiPiece {
             //Attacker team move
             if (CurrentY != 8) {
                 if (CurrentX != 0) {
-                    c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY + 2];
+                    c = BoardController.Instance.ShogiPieces[CurrentX - 1, CurrentY + 2];
                     if (c == null)
                         r[CurrentX - 1, CurrentY + 2] = true;
                     else if (IsAttacker != c.IsAttacker)
@@ -18,7 +18,7 @@ public class Knight : ShogiPiece {
                 }
 
                 if (CurrentX != 8) {
-                    c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY + 2];
+                    c = BoardController.Instance.ShogiPieces[CurrentX + 1, CurrentY + 2];
                     if (c == null)
                         r[CurrentX + 1, CurrentY + 2] = true;
                     else if (IsAttacker != c.IsAttacker)
@@ -29,7 +29,7 @@ public class Knight : ShogiPiece {
             //Defender team move
             if (CurrentY != 0) {
                 if (CurrentX != 0) {
-                    c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY - 2];
+                    c = BoardController.Instance.ShogiPieces[CurrentX - 1, CurrentY - 2];
                     if (c == null)
                         r[CurrentX - 1, CurrentY - 2] = true;
                     else if (IsAttacker != c.IsAttacker)
@@ -37,7 +37,7 @@ public class Knight : ShogiPiece {
                 }
 
                 if (CurrentX != 8) {
-                    c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY - 2];
+                    c = BoardController.Instance.ShogiPieces[CurrentX + 1, CurrentY - 2];
                     if (c == null)
                         r[CurrentX + 1, CurrentY - 2] = true;
                     else if (IsAttacker != c.IsAttacker)
@@ -57,7 +57,7 @@ public class Knight : ShogiPiece {
         transform.DOPath(new Vector3[] { transform.position, jumpMidpoint, tileCenter }, movementDuration)
         .SetEase(Ease.OutQuad)
         .OnComplete(() => {
-            BoardManager.Instance.CompleteMovement(x, y);
+            BoardController.Instance.CompleteMovement(x, y);
         });
     }
 }

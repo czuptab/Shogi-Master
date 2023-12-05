@@ -10,7 +10,7 @@
             if (CurrentY != 8) {
                 for (int k = 0; k < 3; k++) {
                     if (i >= 0 && i < 9) {
-                        c = BoardManager.Instance.ShogiPieces[i, j];
+                        c = BoardController.Instance.ShogiPieces[i, j];
                         if (c == null)
                             r[i, j] = true;
                         else if (IsAttacker != c.IsAttacker)
@@ -24,7 +24,7 @@
             // Down Side
             j = CurrentY - 1;
             if (CurrentY != 0) {
-                c = BoardManager.Instance.ShogiPieces[CurrentX, j];
+                c = BoardController.Instance.ShogiPieces[CurrentX, j];
                 if (c == null)
                     r[CurrentX, j] = true;
                 else if (IsAttacker != c.IsAttacker)
@@ -38,7 +38,7 @@
             if (CurrentY != 0) {
                 for (int k = 0; k < 3; k++) {
                     if (i >= 0 && i < 9) {
-                        c = BoardManager.Instance.ShogiPieces[i, j];
+                        c = BoardController.Instance.ShogiPieces[i, j];
                         if (c == null)
                             r[i, j] = true;
                         else if (IsAttacker != c.IsAttacker)
@@ -52,7 +52,7 @@
             // Top Side
             j = CurrentY + 1;
             if (CurrentY != 8) {
-                c = BoardManager.Instance.ShogiPieces[CurrentX, j];
+                c = BoardController.Instance.ShogiPieces[CurrentX, j];
                 if (c == null)
                     r[CurrentX, j] = true;
                 else if (IsAttacker != c.IsAttacker)
@@ -62,7 +62,7 @@
 
         // Middle Left
         if (CurrentX != 0) {
-            c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY];
+            c = BoardController.Instance.ShogiPieces[CurrentX - 1, CurrentY];
             if (c == null)
                 r[CurrentX - 1, CurrentY] = true;
             else if (IsAttacker != c.IsAttacker)
@@ -71,7 +71,7 @@
 
         // Middle Right
         if (CurrentX != 8) {
-            c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY];
+            c = BoardController.Instance.ShogiPieces[CurrentX + 1, CurrentY];
             if (c == null)
                 r[CurrentX + 1, CurrentY] = true;
             else if (IsAttacker != c.IsAttacker)

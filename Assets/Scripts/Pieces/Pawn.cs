@@ -6,7 +6,7 @@
         //Attacker team move
         if(IsAttacker) {
             if(CurrentY != 8) {
-                c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY + 1];
+                c = BoardController.Instance.ShogiPieces[CurrentX, CurrentY + 1];
                 if(c == null || !c.IsAttacker) {
                     r[CurrentX, CurrentY + 1] = true;
                 }
@@ -14,7 +14,7 @@
         } else {
             //Defender team move
             if (CurrentY != 0) {
-                c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY - 1];
+                c = BoardController.Instance.ShogiPieces[CurrentX, CurrentY - 1];
                 if (c == null || c.IsAttacker) {
                     r[CurrentX, CurrentY - 1] = true;
                     

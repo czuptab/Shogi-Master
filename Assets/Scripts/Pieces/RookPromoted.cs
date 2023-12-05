@@ -14,7 +14,7 @@ public class RookPromoted : ShogiPiece
             if (i >= 9)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, CurrentY];
+            c = BoardController.Instance.ShogiPieces[i, CurrentY];
             if (c == null)
                 r[i, CurrentY] = true;
             else
@@ -34,7 +34,7 @@ public class RookPromoted : ShogiPiece
             if (i < 0)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, CurrentY];
+            c = BoardController.Instance.ShogiPieces[i, CurrentY];
             if (c == null)
                 r[i, CurrentY] = true;
             else
@@ -54,7 +54,7 @@ public class RookPromoted : ShogiPiece
             if (i >= 9)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[CurrentX, i];
+            c = BoardController.Instance.ShogiPieces[CurrentX, i];
             if (c == null)
                 r[CurrentX, i] = true;
             else
@@ -74,7 +74,7 @@ public class RookPromoted : ShogiPiece
             if (i < 0)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[CurrentX, i];
+            c = BoardController.Instance.ShogiPieces[CurrentX, i];
             if (c == null)
                 r[CurrentX, i] = true;
             else
@@ -93,7 +93,7 @@ public class RookPromoted : ShogiPiece
         j++;
         if (i >= 0 && j < 9)
         {
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null || c.IsAttacker != IsAttacker)
                 r[i, j] = true;
         }
@@ -105,7 +105,7 @@ public class RookPromoted : ShogiPiece
         j++;
         if (i < 9 && j < 9)
         {
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null || c.IsAttacker != IsAttacker)
                 r[i, j] = true;
         }
@@ -117,7 +117,7 @@ public class RookPromoted : ShogiPiece
         j--;
         if (i >= 0 && j >= 0)
         {
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null || c.IsAttacker != IsAttacker)
                 r[i, j] = true;
         }
@@ -129,7 +129,7 @@ public class RookPromoted : ShogiPiece
         j--;
         if (i < 9 && j >= 0)
         {
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null || c.IsAttacker != IsAttacker)
                 r[i, j] = true;
         }

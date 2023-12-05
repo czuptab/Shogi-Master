@@ -27,7 +27,7 @@ public abstract class ShogiPiece : MonoBehaviour {
     {
         transform.DOMove(tileCenter, movementDuration).SetEase(Ease.OutQuad)
             .OnComplete(() => {
-                BoardManager.Instance.CompleteMovement(x, y);
+                BoardController.Instance.CompleteMovement(x, y);
             });
     }
 }

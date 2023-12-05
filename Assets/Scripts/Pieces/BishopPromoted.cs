@@ -17,7 +17,7 @@ public class BishopPromoted : ShogiPiece
             if (i < 0 || j >= 9)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else
@@ -39,7 +39,7 @@ public class BishopPromoted : ShogiPiece
             if (i >= 9 || j >= 9)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else
@@ -61,7 +61,7 @@ public class BishopPromoted : ShogiPiece
             if (i < 0 || j < 0)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else
@@ -83,7 +83,7 @@ public class BishopPromoted : ShogiPiece
             if (i >= 9 || j < 0)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else
@@ -98,7 +98,7 @@ public class BishopPromoted : ShogiPiece
         // Up
         if (CurrentY != 8)
         {
-            c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY + 1];
+            c = BoardController.Instance.ShogiPieces[CurrentX, CurrentY + 1];
             if (c == null || IsAttacker != c.IsAttacker)
                 r[CurrentX, CurrentY + 1] = true;
         }
@@ -106,7 +106,7 @@ public class BishopPromoted : ShogiPiece
         // Down
         if (CurrentY != 0)
         {
-            c = BoardManager.Instance.ShogiPieces[CurrentX, CurrentY - 1];
+            c = BoardController.Instance.ShogiPieces[CurrentX, CurrentY - 1];
             if (c == null || IsAttacker != c.IsAttacker)
                 r[CurrentX, CurrentY - 1] = true;
         }
@@ -114,7 +114,7 @@ public class BishopPromoted : ShogiPiece
         // Left
         if (CurrentX != 0)
         {
-            c = BoardManager.Instance.ShogiPieces[CurrentX - 1, CurrentY];
+            c = BoardController.Instance.ShogiPieces[CurrentX - 1, CurrentY];
             if (c == null || IsAttacker != c.IsAttacker)
                 r[CurrentX - 1, CurrentY] = true;
         }
@@ -122,7 +122,7 @@ public class BishopPromoted : ShogiPiece
         // Right
         if (CurrentX != 8)
         {
-            c = BoardManager.Instance.ShogiPieces[CurrentX + 1, CurrentY];
+            c = BoardController.Instance.ShogiPieces[CurrentX + 1, CurrentY];
             if (c == null || IsAttacker != c.IsAttacker)
                 r[CurrentX + 1, CurrentY] = true;
         }

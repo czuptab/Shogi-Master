@@ -15,7 +15,7 @@
             if (i < 0 || j >= 9)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
@@ -35,7 +35,7 @@
             if (i >= 9 || j >= 9)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
@@ -55,7 +55,7 @@
             if (i < 0 || j < 0)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {
@@ -75,7 +75,7 @@
             if (i >= 9 || j < 0)
                 break;
 
-            c = BoardManager.Instance.ShogiPieces[i, j];
+            c = BoardController.Instance.ShogiPieces[i, j];
             if (c == null)
                 r[i, j] = true;
             else {

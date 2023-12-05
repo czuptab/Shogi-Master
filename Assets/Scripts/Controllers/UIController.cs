@@ -1,6 +1,8 @@
-﻿namespace Assets.Scripts.Controllers
+﻿using UnityEngine;
+
+namespace Assets.Scripts.Controllers
 {
-    public class UIController
+    public class UIController : MonoBehaviour
     {
 
     }

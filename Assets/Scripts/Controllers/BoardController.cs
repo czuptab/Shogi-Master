@@ -1,5 +1,7 @@
-﻿using Assets.Scripts.Enum;
+﻿using Assets.Scripts.Consts;
+using Assets.Scripts.Enum;
 using Assets.Scripts.Helpers;
+using Assets.Scripts.Pieces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +11,6 @@ namespace Assets.Scripts.Controllers
     public class BoardController : MonoBehaviour
     {
         #region VARIABLES
-        private const float TILE_SIZE = 1.0f;
-        private const float TILE_OFFSET = 0.5f;
-        private const int BOARD_SIZE = 9;
 
         public static BoardController Instance { set; get; }
         public ShogiPiece[,] ShogiPieces { set; get; }
@@ -96,9 +95,9 @@ namespace Assets.Scripts.Controllers
         private bool CheckForPossibleMoves(ShogiPiece piece)
         {
             _allowedMoves = piece.PossibleMove();
-            for (int i = 0; i < BOARD_SIZE; i++)
+            for (int i = 0; i < BoardConsts.BOARD_SIZE; i++)
             {
-                for (int j = 0; j < BOARD_SIZE; j++)
+                for (int j = 0; j < BoardConsts.BOARD_SIZE; j++)
                 {
                     if (_allowedMoves[i, j])
                     {
@@ -153,7 +152,7 @@ namespace Assets.Scripts.Controllers
 
                 float moveDuration = (float)(totalDistance * 0.5f);
 
-                _selectedShogiPiece.Move(x, y, GetTileCenter(x, y), moveDuration);
+                _selectedShogiPiece.Move(x, y, BoardHelpers.GetTileCenter(x, y), moveDuration);
 
                 HighlightController.Instance.HideHighlights();
             }
@@ -220,7 +219,7 @@ namespace Assets.Scripts.Controllers
 
         private void SpawnShogiPiece(bool isAttacker, PieceType pieceType, int x, int y)
         {
-            GameObject go = Instantiate(shogiPrefabsDictionary[pieceType], GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
+            GameObject go = Instantiate(shogiPrefabsDictionary[pieceType], BoardHelpers.GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
             go.transform.SetParent(transform);
             ShogiPiece shogiPiece = go.GetComponent<ShogiPiece>();
             shogiPiece.IsAttacker = isAttacker;
@@ -233,7 +232,7 @@ namespace Assets.Scripts.Controllers
         private void SpawnAllShogiPieces()
         {
             _activeShogiPieces = new List<GameObject>();
-            ShogiPieces = new ShogiPiece[BOARD_SIZE, BOARD_SIZE];
+            ShogiPieces = new ShogiPiece[BoardConsts.BOARD_SIZE, BoardConsts.BOARD_SIZE];
 
             //Spawn attackers
 
@@ -261,7 +260,7 @@ namespace Assets.Scripts.Controllers
             SpawnShogiPiece(true, PieceType.Bishop, 7, 1);
 
             //Pawns
-            for (int i = 0; i < BOARD_SIZE; i++)
+            for (int i = 0; i < BoardConsts.BOARD_SIZE; i++)
             {
                 SpawnShogiPiece(true, PieceType.Pawn, i, 2);
             }
@@ -293,31 +292,21 @@ namespace Assets.Scripts.Controllers
             SpawnShogiPiece(false, PieceType.Bishop, 1, 7);
 
             //Pawns
-            for (int i = 0; i < BOARD_SIZE; i++)
+            for (int i = 0; i < BoardConsts.BOARD_SIZE; i++)
             {
                 SpawnShogiPiece(false, PieceType.Pawn, i, 6);
             }
         }
-
-        private Vector3 GetTileCenter(int x, int y)
-        {
-            Vector3 origin = Vector3.zero;
-            origin.x += (TILE_SIZE * x) + TILE_OFFSET;
-            origin.z += (TILE_SIZE * y) + TILE_OFFSET;
-
-            return origin;
-        }
-
         private void DrawShogiBoard()
         {
-            Vector3 widthLine = Vector3.right * BOARD_SIZE;
-            Vector3 heightLine = Vector3.forward * BOARD_SIZE;
+            Vector3 widthLine = Vector3.right * BoardConsts.BOARD_SIZE;
+            Vector3 heightLine = Vector3.forward * BoardConsts.BOARD_SIZE;
 
-            for (int i = 0; i <= BOARD_SIZE; i++)
+            for (int i = 0; i <= BoardConsts.BOARD_SIZE; i++)
             {
                 Vector3 start = Vector3.forward * i;
                 Debug.DrawLine(start, start + widthLine);
-                for (int j = 0; j <= BOARD_SIZE; j++)
+                for (int j = 0; j <= BoardConsts.BOARD_SIZE; j++)
                 {
                     start = Vector3.right * j;
                     Debug.DrawLine(start, start + heightLine);
@@ -344,10 +333,10 @@ namespace Assets.Scripts.Controllers
                 Destroy(win, 2);
             }
             else
-            {
+        {
                 GameObject win = Instantiate(defenderWin);
                 Destroy(win, 2);
-            }
+        }
 
             foreach (GameObject go in _activeShogiPieces)
                 Destroy(go);

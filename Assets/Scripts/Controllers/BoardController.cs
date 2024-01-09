@@ -5,6 +5,7 @@ using Assets.Scripts.Pieces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Controllers
 {
@@ -30,14 +31,14 @@ namespace Assets.Scripts.Controllers
         private Dictionary<PieceType, GameObject> shogiPrefabsDictionary;
 
         private readonly Dictionary<PieceType, PieceType> _promotionMap = new()
-    {
-        { PieceType.Lance, PieceType.GoldGeneral },
-        { PieceType.Pawn, PieceType.GoldGeneral },
-        { PieceType.SilverGeneral, PieceType.GoldGeneral },
-        { PieceType.Knight, PieceType.GoldGeneral },
-        { PieceType.Bishop, PieceType.BishopPromoted },
-        { PieceType.Rook, PieceType.RookPromoted }
-    };
+        {
+            { PieceType.Lance, PieceType.GoldGeneral },
+            { PieceType.Pawn, PieceType.GoldGeneral },
+            { PieceType.SilverGeneral, PieceType.GoldGeneral },
+            { PieceType.Knight, PieceType.GoldGeneral },
+            { PieceType.Bishop, PieceType.BishopPromoted },
+            { PieceType.Rook, PieceType.RookPromoted }
+        };
 
         #endregion
 
@@ -50,6 +51,11 @@ namespace Assets.Scripts.Controllers
 
         private void Awake()
         {
+            if (cameraController == null)
+            {
+                Debug.LogError("[BoardController] CameraController dependency is not set.");
+                return;
+            }
             if (inputController == null)
             {
                 Debug.LogError("[BoardController] InputController dependency is not set.");
@@ -327,23 +333,7 @@ namespace Assets.Scripts.Controllers
 
         private void EndGame()
         {
-            if (isAttackerTurn)
-            {
-                GameObject win = Instantiate(attackerWin);
-                Destroy(win, 2);
-            }
-            else
-        {
-                GameObject win = Instantiate(defenderWin);
-                Destroy(win, 2);
-        }
-
-            foreach (GameObject go in _activeShogiPieces)
-                Destroy(go);
-
-            isAttackerTurn = true;
-            HighlightController.Instance.HideHighlights();
-            SpawnAllShogiPieces();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void OnDestroy()
@@ -356,5 +346,5 @@ namespace Assets.Scripts.Controllers
         }
 
         #endregion
-    } 
+    }
 }

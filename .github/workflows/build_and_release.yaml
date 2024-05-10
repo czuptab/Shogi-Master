@@ -8,19 +8,18 @@ on:
 jobs:
   buildForWindows:
     name: Build for ${{ matrix.targetPlatform }}
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         targetPlatform:
           - StandaloneWindows
           - StandaloneWindows64
-          - WSAPlayer
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
@@ -31,7 +30,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build

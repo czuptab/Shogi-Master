@@ -8,13 +8,14 @@ on:
 jobs:
   buildForWindows:
     name: Build for ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
     strategy:
       fail-fast: false
       matrix:
         targetPlatform:
           - StandaloneWindows
           - StandaloneWindows64
+          - WSAPlayer
     steps:
       - uses: actions/checkout@v4
         with:

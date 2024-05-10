@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Controllers
 {
+    [RequireComponent(typeof(CameraController))]
+    [RequireComponent(typeof(InputController))]
     public class BoardController : MonoBehaviour
     {
         #region VARIABLES
@@ -28,7 +30,7 @@ namespace Assets.Scripts.Controllers
         private int _selectionY = -1;
         private List<GameObject> _activeShogiPieces;
         private bool isAttackerTurn = true;
-        private Dictionary<PieceType, GameObject> shogiPrefabsDictionary;
+        private Dictionary<PieceType, GameObject> _shogiPrefabsDictionary;
 
         private readonly Dictionary<PieceType, PieceType> _promotionMap = new()
         {
@@ -51,17 +53,6 @@ namespace Assets.Scripts.Controllers
 
         private void Awake()
         {
-            if (cameraController == null)
-            {
-                Debug.LogError("[BoardController] CameraController dependency is not set.");
-                return;
-            }
-            if (inputController == null)
-            {
-                Debug.LogError("[BoardController] InputController dependency is not set.");
-                return;
-            }
-
             inputController.OnSelect += HandleSelectShogiPiece;
             inputController.OnPromote += HandlePromoteShogiPiece;
             InitializePrefabDictionary();
@@ -166,12 +157,12 @@ namespace Assets.Scripts.Controllers
 
         private void InitializePrefabDictionary()
         {
-            shogiPrefabsDictionary = new Dictionary<PieceType, GameObject>();
+            _shogiPrefabsDictionary = new Dictionary<PieceType, GameObject>();
             foreach (PiecePrefabPair pair in shogiPrefabsList)
             {
                 if (pair.prefab != null)
                 {
-                    shogiPrefabsDictionary[pair.pieceType] = pair.prefab;
+                    _shogiPrefabsDictionary[pair.pieceType] = pair.prefab;
                 }
                 else
                 {
@@ -225,7 +216,7 @@ namespace Assets.Scripts.Controllers
 
         private void SpawnShogiPiece(bool isAttacker, PieceType pieceType, int x, int y)
         {
-            GameObject go = Instantiate(shogiPrefabsDictionary[pieceType], BoardHelpers.GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
+            GameObject go = Instantiate(_shogiPrefabsDictionary[pieceType], BoardHelpers.GetTileCenter(x, y), isAttacker ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(-90, 0, 0));
             go.transform.SetParent(transform);
             ShogiPiece shogiPiece = go.GetComponent<ShogiPiece>();
             shogiPiece.IsAttacker = isAttacker;

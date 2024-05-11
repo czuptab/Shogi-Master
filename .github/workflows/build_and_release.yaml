@@ -1,8 +1,12 @@
 name: Unity Actions
 
 on:
-  pull_request: {}
-  push: {}
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
   workflow_dispatch: {}
 
 jobs:
